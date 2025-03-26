@@ -8,7 +8,7 @@ void main() {
 }
 
 class ThemeProvider with ChangeNotifier {
-  bool _isDarkMode = false;
+  bool _isDarkMode = true;
 
   bool get isDarkMode => _isDarkMode;
 
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
               ),
               textTheme: GoogleFonts.poppinsTextTheme(),
               cardTheme: CardTheme(
-                elevation: 3,
+                elevation: 6,
                 shadowColor: Colors.black.withOpacity(0.1),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -113,7 +113,7 @@ class MyApp extends StatelessWidget {
                 displayColor: Colors.white,
               ),
               cardTheme: CardTheme(
-                elevation: 3,
+                elevation: 6,
                 shadowColor: Colors.black.withOpacity(0.3),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
