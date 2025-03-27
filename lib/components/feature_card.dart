@@ -40,13 +40,20 @@ class FeatureCard extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
                   color: iconColor?.withOpacity(0.1) ??
-                      colorScheme.primary.withOpacity(0.1),
+                      (title.toLowerCase().contains('lịch') ||
+                              title.toLowerCase().contains('thống kê')
+                          ? const Color(0xFFF79421).withOpacity(0.1)
+                          : colorScheme.primary.withOpacity(0.1)),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
                   icon,
                   size: 28,
-                  color: iconColor ?? colorScheme.primary,
+                  color: iconColor ??
+                      (title.toLowerCase().contains('lịch') ||
+                              title.toLowerCase().contains('thống kê')
+                          ? const Color(0xFFF79421)
+                          : colorScheme.primary),
                 ),
               ),
               const SizedBox(height: 12),

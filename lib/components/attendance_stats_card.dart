@@ -42,13 +42,13 @@ class AttendanceStatsCard extends StatelessWidget {
                   icon: Icon(
                     Icons.arrow_forward,
                     size: 16,
-                    color: colorScheme.primary,
+                    color: colorScheme.secondary,
                   ),
                   label: Text(
                     'Chi tiết',
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: colorScheme.primary,
+                      color: colorScheme.secondary,
                     ),
                   ),
                   style: TextButton.styleFrom(
@@ -64,8 +64,19 @@ class AttendanceStatsCard extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(16),
               decoration: BoxDecoration(
-                color: colorScheme.primary.withOpacity(0.1),
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    colorScheme.primary.withOpacity(0.1),
+                    colorScheme.secondary.withOpacity(0.05),
+                  ],
+                ),
                 borderRadius: BorderRadius.circular(16),
+                border: Border.all(
+                  color: colorScheme.primary.withOpacity(0.1),
+                  width: 1,
+                ),
               ),
               child: Column(
                 children: [
@@ -136,10 +147,17 @@ class AttendanceStatsCard extends StatelessWidget {
 
     return Column(
       children: [
-        Icon(
-          icon,
-          size: 22,
-          color: color,
+        Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: color.withOpacity(0.1),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            size: 20,
+            color: color,
+          ),
         ),
         const SizedBox(height: 6),
         Text(
@@ -154,6 +172,7 @@ class AttendanceStatsCard extends StatelessWidget {
           style: theme.textTheme.bodySmall?.copyWith(
             color: theme.colorScheme.onSurface.withOpacity(0.7),
           ),
+          textAlign: TextAlign.center,
         ),
       ],
     );

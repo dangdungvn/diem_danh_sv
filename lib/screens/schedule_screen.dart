@@ -10,7 +10,7 @@ class ScheduleScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
         title: Text(
           'Thời khóa biểu',

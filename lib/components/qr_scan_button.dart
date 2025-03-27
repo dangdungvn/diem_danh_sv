@@ -26,7 +26,7 @@ class QRScanButton extends StatelessWidget {
       child: ClipRRect(
         borderRadius: BorderRadius.circular(24),
         child: Material(
-          color: colorScheme.primary.withOpacity(0.1),
+          color: colorScheme.primary.withOpacity(0.06),
           child: InkWell(
             onTap: () => _showQRScanner(context),
             child: Padding(
@@ -37,13 +37,20 @@ class QRScanButton extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.2),
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          colorScheme.primary.withOpacity(0.2),
+                          colorScheme.secondary.withOpacity(0.15),
+                        ],
+                      ),
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
                       Icons.qr_code_scanner,
                       size: 40,
-                      color: colorScheme.primary,
+                      color: colorScheme.secondary,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -163,19 +170,83 @@ class _QRScannerViewState extends State<QRScannerView> {
                   key: qrKey,
                   onQRViewCreated: _onQRViewCreated,
                 ),
-                // Custom overlay with scanning animation
+                // Overlay với animation quét
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(16),
                     border: Border.all(
-                      color: colorScheme.primary,
-                      width: 2,
+                      color: colorScheme.secondary,
+                      width: 3,
                     ),
                   ),
                   width: size.width * 0.7,
                   height: size.width * 0.7,
+                  child: Stack(
+                    children: [
+                      // Góc trên trái
+                      Positioned(
+                        top: -3,
+                        left: -3,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              topLeft: Radius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Góc trên phải
+                      Positioned(
+                        top: -3,
+                        right: -3,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Góc dưới trái
+                      Positioned(
+                        bottom: -3,
+                        left: -3,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                      // Góc dưới phải
+                      Positioned(
+                        bottom: -3,
+                        right: -3,
+                        child: Container(
+                          width: 20,
+                          height: 20,
+                          decoration: BoxDecoration(
+                            color: colorScheme.secondary,
+                            borderRadius: const BorderRadius.only(
+                              bottomRight: Radius.circular(16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                // Show status or result text
+                // Hiển thị trạng thái hoặc kết quả
                 Positioned(
                   bottom: 40,
                   child: Container(
@@ -184,7 +255,7 @@ class _QRScannerViewState extends State<QRScannerView> {
                       vertical: 12,
                     ),
                     decoration: BoxDecoration(
-                      color: colorScheme.surface.withOpacity(0.8),
+                      color: colorScheme.surface.withOpacity(0.9),
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
@@ -203,13 +274,14 @@ class _QRScannerViewState extends State<QRScannerView> {
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
                               valueColor: AlwaysStoppedAnimation<Color>(
-                                  colorScheme.primary),
+                                colorScheme.secondary,
+                              ),
                             ),
                           )
                         else
                           Icon(
                             Icons.check_circle,
-                            color: colorScheme.primary,
+                            color: colorScheme.secondary,
                             size: 20,
                           ),
                         const SizedBox(width: 12),
@@ -218,7 +290,7 @@ class _QRScannerViewState extends State<QRScannerView> {
                           style: theme.textTheme.titleMedium?.copyWith(
                             color: _isScanning
                                 ? colorScheme.onSurface
-                                : colorScheme.primary,
+                                : colorScheme.secondary,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -242,11 +314,10 @@ class _QRScannerViewState extends State<QRScannerView> {
       setState(() {
         _isScanning = false;
       });
-      // Handle the scanned QR code data
-      // For example, you could show a success dialog
+      // Xử lý dữ liệu mã QR đã quét
       Future.delayed(const Duration(seconds: 1), () {
         Navigator.of(context).pop();
-        // TODO: Process the QR code data
+        // TODO: Xử lý dữ liệu mã QR
       });
     });
   }

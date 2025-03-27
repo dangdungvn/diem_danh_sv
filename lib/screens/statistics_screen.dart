@@ -11,7 +11,7 @@ class StatisticsScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
         title: Text(
           'Thống kê điểm danh',
@@ -90,7 +90,7 @@ class StatisticsScreen extends StatelessWidget {
           title,
           style: theme.textTheme.titleLarge?.copyWith(
             fontWeight: FontWeight.w600,
-            color: colorScheme.onSurface,
+            color: colorScheme.onBackground,
           ),
         ),
       ],
@@ -238,12 +238,13 @@ class StatisticsScreen extends StatelessWidget {
           value,
           style: theme.textTheme.titleMedium?.copyWith(
             fontWeight: FontWeight.bold,
+            color: theme.colorScheme.onSurface,
           ),
         ),
         Text(
           title,
           style: theme.textTheme.bodySmall?.copyWith(
-            color: theme.colorScheme.onSurface.withOpacity(0.7),
+            color: theme.colorScheme.onSurfaceVariant,
           ),
           textAlign: TextAlign.center,
         ),

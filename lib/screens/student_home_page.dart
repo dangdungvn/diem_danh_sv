@@ -22,7 +22,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
     final colorScheme = theme.colorScheme;
 
     return Scaffold(
-      backgroundColor: colorScheme.surface,
+      backgroundColor: colorScheme.background,
       appBar: AppBar(
         title: const Text('Điểm Danh SV'),
         centerTitle: true,
@@ -69,14 +69,14 @@ class _StudentHomePageState extends State<StudentHomePage> {
                     Text(
                       'Xin chào,',
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onSurface.withOpacity(0.7),
+                        color: colorScheme.onBackground.withOpacity(0.7),
                       ),
                     ),
                     Text(
                       'Nguyễn Văn A',
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: colorScheme.onSurface,
+                        color: colorScheme.onBackground,
                       ),
                     ),
                   ],
@@ -135,7 +135,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                               Text(
                                 'Điểm danh nhanh chóng bằng mã QR',
                                 style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: colorScheme.onSurface.withOpacity(0.7),
+                                  color: colorScheme.onSurfaceVariant,
                                 ),
                               ),
                             ],
@@ -159,7 +159,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                 'Tính năng',
                 style: theme.textTheme.titleLarge?.copyWith(
                   fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
+                  color: colorScheme.onBackground,
                 ),
               ),
               const SizedBox(height: 16),
