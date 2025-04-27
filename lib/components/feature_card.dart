@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 class FeatureCard extends StatelessWidget {
   final IconData icon;
   final String title;
+  final String? description;
   final VoidCallback onTap;
   final Color? backgroundColor;
   final Color? iconColor;
@@ -11,6 +12,7 @@ class FeatureCard extends StatelessWidget {
     super.key,
     required this.icon,
     required this.title,
+    this.description,
     required this.onTap,
     this.backgroundColor,
     this.iconColor,
@@ -22,39 +24,46 @@ class FeatureCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Card(
-      elevation: 6,
-      shadowColor: Colors.black.withOpacity(0.05),
+      elevation: 4,
+      shadowColor: (backgroundColor ?? colorScheme.primary.withOpacity(0.1))
+          .withOpacity(0.3),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: colorScheme.outline),
+        borderRadius: BorderRadius.circular(16),
+        side: BorderSide(
+          color: colorScheme.outline.withOpacity(0.3),
+          width: 0.5,
+        ),
       ),
-      color: backgroundColor ?? theme.cardTheme.color ?? colorScheme.surface,
+      color: theme.cardTheme.color ?? colorScheme.surface,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(16),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: iconColor?.withOpacity(0.1) ??
-                      (title.toLowerCase().contains('lịch') ||
-                              title.toLowerCase().contains('thống kê')
-                          ? const Color(0xFFF79421).withOpacity(0.1)
-                          : colorScheme.primary.withOpacity(0.1)),
-                  shape: BoxShape.circle,
+                  color:
+                      backgroundColor ?? colorScheme.primary.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color:
+                          (iconColor ?? colorScheme.primary).withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                      spreadRadius: 0,
+                    ),
+                  ],
                 ),
                 child: Icon(
                   icon,
-                  size: 24,
-                  color: iconColor ??
-                      (title.toLowerCase().contains('lịch') ||
-                              title.toLowerCase().contains('thống kê')
-                          ? const Color(0xFFF79421)
-                          : colorScheme.primary),
+                  size: 26,
+                  color: iconColor ?? colorScheme.primary,
                 ),
               ),
               const SizedBox(height: 12),
@@ -64,7 +73,35 @@ class FeatureCard extends StatelessWidget {
                   fontWeight: FontWeight.w600,
                   color: colorScheme.onSurface,
                 ),
-                textAlign: TextAlign.center,
+              ),
+              if (description != null) ...[
+                const SizedBox(height: 4),
+                Text(
+                  description!,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+              const Spacer(),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  height: 28,
+                  width: 28,
+                  decoration: BoxDecoration(
+                    color: (iconColor ?? colorScheme.primary).withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Icon(
+                    Icons.arrow_forward_ios,
+                    size: 12,
+                    color: iconColor ?? colorScheme.primary,
+                  ),
+                ),
               ),
             ],
           ),
