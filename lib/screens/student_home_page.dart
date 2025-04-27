@@ -296,7 +296,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                   FeatureCard(
                     icon: Icons.bar_chart,
                     title: 'Thống kê',
-                    description: 'Thống kê điểm danh chi tiết',
+                    description: 'Thống kê chi tiết',
                     onTap: () {
                       Navigator.push(
                         context,
