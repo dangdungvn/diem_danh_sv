@@ -20,7 +20,7 @@ class ScheduleScreen extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        elevation: 0,
+        elevation: 6,
         backgroundColor: colorScheme.surface,
         leading: IconButton(
           icon: Icon(
@@ -101,7 +101,7 @@ class ScheduleScreen extends StatelessWidget {
         onPressed: () {
           // TODO: Implement calendar view
         },
-        elevation: 3,
+        elevation: 6,
         backgroundColor: colorScheme.primary,
         child: const Icon(Icons.calendar_month),
       ),
@@ -123,10 +123,11 @@ class ScheduleScreen extends StatelessWidget {
 
     return Card(
       margin: const EdgeInsets.all(16),
-      elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      elevation: 6,
+      shadowColor: Colors.black.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: colorScheme.outline),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -157,7 +158,7 @@ class ScheduleScreen extends StatelessWidget {
                 Text(
                   weekRange,
                   style: theme.textTheme.titleMedium?.copyWith(
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w600,
                     color: colorScheme.onSurface,
                   ),
                 ),
@@ -205,10 +206,11 @@ class _DayScheduleCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Card(
-      elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      elevation: 6,
+      shadowColor: Colors.black.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: colorScheme.outline),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
@@ -230,7 +232,7 @@ class _DayScheduleCard extends StatelessWidget {
                         day.substring(day.length - 1),
                         style: theme.textTheme.titleMedium?.copyWith(
                           color: colorScheme.primary,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -261,87 +263,104 @@ class _DayScheduleCard extends StatelessWidget {
                     vertical: 6,
                   ),
                   decoration: BoxDecoration(
-                    color: colorScheme.secondary.withOpacity(0.1),
+                    color: colorScheme.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Text(
-                    '${classes.length} môn',
-                    style: theme.textTheme.bodySmall?.copyWith(
+                    '${classes.length} môn học',
+                    style: theme.textTheme.bodyMedium?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: colorScheme.secondary,
+                      color: colorScheme.primary,
                     ),
                   ),
                 ),
               ],
             ),
-            const Divider(
-              height: 24,
-            ),
-            ...classes.map((classSchedule) {
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 16),
-                child: _buildClassItem(context, classSchedule),
-              );
-            }).toList(),
+            const SizedBox(height: 16),
+            const Divider(height: 1),
+            const SizedBox(height: 16),
+            ...classes.map((class_) => _buildClassItem(context, class_)),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildClassItem(BuildContext context, _ClassSchedule classSchedule) {
+  Widget _buildClassItem(BuildContext context, _ClassSchedule class_) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          width: 4,
-          height: 80,
-          decoration: BoxDecoration(
-            color: colorScheme.primary,
-            borderRadius: BorderRadius.circular(2),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: colorScheme.secondary.withOpacity(0.1),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.school,
+              size: 20,
+              color: colorScheme.secondary,
+            ),
           ),
-        ),
-        const SizedBox(width: 16),
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                classSchedule.subject,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onSurface,
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  class_.subject,
+                  style: theme.textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onSurface,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  _ClassInfoItem(
-                    icon: Icons.access_time,
-                    text: classSchedule.time,
-                    theme: theme,
+                const SizedBox(height: 4),
+                Text(
+                  class_.time,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
                   ),
-                  const SizedBox(width: 16),
-                  _ClassInfoItem(
-                    icon: Icons.room,
-                    text: classSchedule.room,
-                    theme: theme,
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              _ClassInfoItem(
-                icon: Icons.person,
-                text: classSchedule.teacher,
-                theme: theme,
-              ),
-            ],
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.location_on,
+                      size: 16,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      class_.room,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    Icon(
+                      Icons.person,
+                      size: 16,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                    const SizedBox(width: 4),
+                    Text(
+                      class_.teacher,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
@@ -361,81 +380,65 @@ class _EmptyDayCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Card(
-      elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      elevation: 6,
+      shadowColor: Colors.black.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: colorScheme.outline),
       ),
       child: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
+        child: Row(
           children: [
-            Row(
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: colorScheme.surfaceContainer,
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                day.substring(day.length - 1),
+                style: theme.textTheme.titleMedium?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surfaceContainerHighest.withOpacity(0.3),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    day.substring(day.length - 1),
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant,
-                      fontWeight: FontWeight.bold,
-                    ),
+                Text(
+                  day,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: colorScheme.onSurface,
+                    fontWeight: FontWeight.w600,
                   ),
                 ),
-                const SizedBox(width: 12),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      day,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        color: colorScheme.onSurface,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    Text(
-                      date,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
-                      ),
-                    ),
-                  ],
+                Text(
+                  date,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const Spacer(),
             Container(
               padding: const EdgeInsets.symmetric(
-                vertical: 16,
-                horizontal: 24,
+                horizontal: 12,
+                vertical: 6,
               ),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: colorScheme.surfaceContainerHighest.withOpacity(0.2),
-                ),
+                color: colorScheme.surfaceContainer,
+                borderRadius: BorderRadius.circular(12),
               ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.event_busy,
-                    color: colorScheme.onSurfaceVariant.withOpacity(0.7),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Không có lịch học',
-                    style: theme.textTheme.bodyMedium?.copyWith(
-                      color: colorScheme.onSurfaceVariant.withOpacity(0.7),
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+              child: Text(
+                'Không có lịch học',
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurfaceVariant,
+                ),
               ),
             ),
           ],
@@ -457,38 +460,4 @@ class _ClassSchedule {
     required this.room,
     required this.teacher,
   });
-}
-
-class _ClassInfoItem extends StatelessWidget {
-  final IconData icon;
-  final String text;
-  final ThemeData theme;
-
-  const _ClassInfoItem({
-    required this.icon,
-    required this.text,
-    required this.theme,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          size: 16,
-          color: theme.colorScheme.primary.withOpacity(0.7),
-        ),
-        const SizedBox(width: 6),
-        Text(
-          text,
-          style: theme.textTheme.bodyMedium?.copyWith(
-            color: theme.colorScheme.onSurfaceVariant,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ],
-    );
-  }
 }

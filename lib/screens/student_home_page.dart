@@ -26,7 +26,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
       appBar: AppBar(
         title: const Text('Điểm Danh SV'),
         centerTitle: true,
-        elevation: 0,
+        elevation: 6,
         backgroundColor: colorScheme.surface,
         actions: [
           IconButton(
@@ -69,14 +69,14 @@ class _StudentHomePageState extends State<StudentHomePage> {
                     Text(
                       'Xin chào,',
                       style: theme.textTheme.bodyLarge?.copyWith(
-                        color: colorScheme.onBackground.withOpacity(0.7),
+                        color: colorScheme.onSurfaceVariant,
                       ),
                     ),
                     Text(
                       'Nguyễn Văn A',
                       style: theme.textTheme.headlineSmall?.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: colorScheme.onBackground,
+                        fontWeight: FontWeight.w600,
+                        color: colorScheme.onSurface,
                       ),
                     ),
                   ],
@@ -89,10 +89,11 @@ class _StudentHomePageState extends State<StudentHomePage> {
 
               // Quick access buttons
               Card(
-                elevation: 3,
-                shadowColor: Colors.black.withOpacity(0.1),
+                elevation: 6,
+                shadowColor: Colors.black.withOpacity(0.05),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
+                  side: BorderSide(color: colorScheme.outline),
                 ),
                 child: InkWell(
                   onTap: () {
@@ -103,7 +104,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                       builder: (context) => const QRScanButton(),
                     );
                   },
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(12),
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Row(
@@ -117,7 +118,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                           child: Icon(
                             Icons.qr_code_scanner,
                             color: colorScheme.primary,
-                            size: 32,
+                            size: 24,
                           ),
                         ),
                         const SizedBox(width: 16),
@@ -128,7 +129,7 @@ class _StudentHomePageState extends State<StudentHomePage> {
                               Text(
                                 'Quét mã QR',
                                 style: theme.textTheme.titleMedium?.copyWith(
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w600,
                                   color: colorScheme.onSurface,
                                 ),
                               ),
@@ -158,8 +159,8 @@ class _StudentHomePageState extends State<StudentHomePage> {
               Text(
                 'Tính năng',
                 style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  color: colorScheme.onBackground,
+                  fontWeight: FontWeight.w600,
+                  color: colorScheme.onSurface,
                 ),
               ),
               const SizedBox(height: 16),
@@ -248,18 +249,42 @@ class _StudentHomePageState extends State<StudentHomePage> {
             label: 'Điểm danh',
           ),
           NavigationDestination(
-            icon: Icon(Icons.notifications),
-            label: 'Thông báo',
-          ),
-          NavigationDestination(
             icon: Icon(Icons.person),
-            label: 'Hồ sơ',
+            label: 'Cá nhân',
           ),
         ],
-        selectedIndex: 0,
         onDestinationSelected: (index) {
-          // TODO: Handle navigation
+          switch (index) {
+            case 0:
+              // Already on home page
+              break;
+            case 1:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ScheduleScreen(),
+                ),
+              );
+              break;
+            case 2:
+              showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (context) => const QRScanButton(),
+              );
+              break;
+            case 3:
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ProfileScreen(),
+                ),
+              );
+              break;
+          }
         },
+        selectedIndex: 0,
       ),
     );
   }

@@ -22,15 +22,16 @@ class FeatureCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Card(
-      elevation: 3,
-      shadowColor: Colors.black.withOpacity(0.1),
+      elevation: 6,
+      shadowColor: Colors.black.withOpacity(0.05),
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: colorScheme.outline),
       ),
       color: backgroundColor ?? theme.cardTheme.color ?? colorScheme.surface,
       child: InkWell(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
@@ -48,7 +49,7 @@ class FeatureCard extends StatelessWidget {
                 ),
                 child: Icon(
                   icon,
-                  size: 28,
+                  size: 24,
                   color: iconColor ??
                       (title.toLowerCase().contains('lịch') ||
                               title.toLowerCase().contains('thống kê')
