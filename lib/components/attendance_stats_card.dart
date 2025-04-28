@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../screens/statistics_screen.dart';
+import '../views/statistics_screen.dart';
 
 class AttendanceStatsCard extends StatelessWidget {
   const AttendanceStatsCard({super.key});

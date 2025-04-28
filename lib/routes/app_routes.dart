@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../screens/student_home_page.dart';
-import '../screens/profile_screen.dart';
-import '../screens/schedule_screen.dart';
-import '../screens/statistics_screen.dart';
+import '../views/student_home_page.dart';
+import '../views/profile_screen.dart';
+import '../views/schedule_screen.dart';
+import '../views/statistics_screen.dart';
 
 class AppRoutes {
   static const String home = '/';

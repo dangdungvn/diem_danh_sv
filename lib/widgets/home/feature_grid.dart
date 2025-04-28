@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../components/feature_card.dart';
-import '../../screens/profile_screen.dart';
-import '../../screens/schedule_screen.dart';
-import '../../screens/statistics_screen.dart';
+import '../../views/profile_screen.dart';
+import '../../views/schedule_screen.dart';
+import '../../views/statistics_screen.dart';
 
 class FeatureGrid extends StatelessWidget {
   const FeatureGrid({super.key});

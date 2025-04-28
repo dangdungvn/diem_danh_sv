@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../providers/theme_provider.dart';
-import '../../screens/profile_screen.dart';
+import '../../views/profile_screen.dart';
 
 class StudentAppBar extends StatelessWidget {
   const StudentAppBar({super.key});
@@ -9,7 +9,7 @@ class StudentAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    
+
     return SliverAppBar(
       expandedHeight: 120,
       floating: false,
