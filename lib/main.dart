@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'providers/theme_provider.dart';
+import 'providers/auth_provider.dart';
 import 'theme/light_theme.dart';
 import 'theme/dark_theme.dart';
 import 'routes/app_routes.dart';
 
-void main() {
+Future<void> main() async {
+  // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Tải file .env
+  await dotenv.load(fileName: '.env');
+
   runApp(const MyApp());
 }
 
@@ -14,8 +22,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => ThemeProvider(),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+      ],
       child: Consumer<ThemeProvider>(
         builder: (context, themeProvider, child) {
           return MaterialApp(
@@ -23,8 +34,9 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             theme: getLightTheme(),
             darkTheme: getDarkTheme(),
-            themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            initialRoute: AppRoutes.home,
+            themeMode:
+                themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            initialRoute: AppRoutes.login,
             routes: AppRoutes.getRoutes(),
             onGenerateRoute: AppRoutes.generateRoute,
           );
