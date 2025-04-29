@@ -1,4 +1,5 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'dart:convert';
 import '../services/auth_service.dart';
 import '../models/auth_model.dart';
 import '../models/user_model.dart';
@@ -51,10 +52,15 @@ class AuthController {
   Future<User?> getUserInfo() async {
     final userInfoString = await _storage.read(key: 'user_info');
     if (userInfoString != null && userInfoString.isNotEmpty) {
-      // Parse string to Map và tạo User từ Map
-      // Cần convert string to Map ở đây
-      // Đây là giải pháp tạm thời, trong thực tế nên dùng jsonDecode
-      return null;
+      try {
+        // Chuyển đổi chuỗi JSON thành Map
+        final Map<String, dynamic> userMap = json.decode(userInfoString);
+        // Tạo đối tượng User từ Map
+        return User.fromJson(userMap);
+      } catch (e) {
+        print('Lỗi parse thông tin người dùng: $e');
+        return null;
+      }
     }
     return null;
   }

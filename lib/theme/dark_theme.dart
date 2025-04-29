@@ -42,7 +42,7 @@ ThemeData getDarkTheme() {
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      elevation: 0,
+      elevation: 6,
       backgroundColor: const Color(0xFF1E293B),
       foregroundColor: Colors.white,
       titleTextStyle: GoogleFonts.poppins(
@@ -55,7 +55,7 @@ ThemeData getDarkTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        elevation: 4,
+        elevation: 6,
         backgroundColor: const Color(0xFF403F8B),
         foregroundColor: Colors.white,
         shadowColor: const Color(0xFF222862).withOpacity(0.2),

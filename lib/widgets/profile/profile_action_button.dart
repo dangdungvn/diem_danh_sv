@@ -4,76 +4,81 @@ class ProfileActionButton extends StatelessWidget {
   final IconData icon;
   final String label;
   final VoidCallback onTap;
-  final bool isDestructive;
   final Color? color;
+  final bool isDestructive;
 
   const ProfileActionButton({
     super.key,
     required this.icon,
     required this.label,
     required this.onTap,
-    this.isDestructive = false,
     this.color,
+    this.isDestructive = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isDark = colorScheme.brightness == Brightness.dark;
 
     final buttonColor =
-        isDestructive ? colorScheme.error : color ?? colorScheme.primary;
-    final containerColor = isDestructive
-        ? colorScheme.errorContainer.withOpacity(0.3)
-        : buttonColor.withOpacity(0.08);
-    final textColor = isDestructive ? colorScheme.error : buttonColor;
-    final iconColor = isDestructive ? colorScheme.error : buttonColor;
+        isDestructive ? Colors.red : (color ?? colorScheme.primary);
 
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(16),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        decoration: BoxDecoration(
-          color: containerColor,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isDestructive
-                ? colorScheme.error.withOpacity(0.3)
-                : buttonColor.withOpacity(0.2),
-            width: 1,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: Ink(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+          decoration: BoxDecoration(
+            color: isDark ? colorScheme.surfaceContainer : Colors.white,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: isDark
+                    ? Colors.black.withOpacity(0.2)
+                    : Colors.grey.withOpacity(0.1),
+                blurRadius: 4,
+                spreadRadius: 0,
+                offset: const Offset(0, 2),
+              ),
+            ],
           ),
-        ),
-        child: Row(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: isDestructive
-                    ? colorScheme.error.withOpacity(0.1)
-                    : buttonColor.withOpacity(0.1),
-                shape: BoxShape.circle,
+          child: Row(
+            children: [
+              Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: isDark
+                      ? buttonColor.withOpacity(0.2)
+                      : buttonColor.withOpacity(0.1),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  icon,
+                  color: buttonColor,
+                  size: 22,
+                ),
               ),
-              child: Icon(
-                icon,
-                size: 20,
-                color: iconColor,
+              const SizedBox(width: 16),
+              Expanded(
+                child: Text(
+                  label,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: colorScheme.onSurface,
+                  ),
+                ),
               ),
-            ),
-            const SizedBox(width: 16),
-            Text(
-              label,
-              style: theme.textTheme.bodyLarge?.copyWith(
-                fontWeight: FontWeight.w600,
-                color: textColor,
+              Icon(
+                Icons.chevron_right,
+                color: colorScheme.onSurfaceVariant.withOpacity(0.5),
               ),
-            ),
-            const Spacer(),
-            Icon(
-              Icons.chevron_right,
-              color: iconColor,
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
