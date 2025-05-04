@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+import '../../models/attendance_history_model.dart';
+import '../../providers/attendance_provider.dart';
 
-class AttendanceDetailCard extends StatelessWidget {
+class AttendanceDetailCard extends StatefulWidget {
   const AttendanceDetailCard({super.key});
+
+  @override
+  State<AttendanceDetailCard> createState() => _AttendanceDetailCardState();
+}
+
+class _AttendanceDetailCardState extends State<AttendanceDetailCard> {
+  @override
+  void initState() {
+    super.initState();
+    // Lấy dữ liệu điểm danh khi màn hình được khởi tạo
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AttendanceProvider>(context, listen: false)
+          .fetchAttendanceHistory();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,28 +109,87 @@ class AttendanceDetailCard extends StatelessWidget {
 
               const SizedBox(height: 16),
 
-              // Danh sách điểm danh
-              _buildAttendanceRecord(
-                context,
-                date: DateTime.now().subtract(const Duration(days: 1)),
-                isPresent: true,
-                subject: 'Lập trình di động',
-              ),
-              const Divider(height: 24),
+              // Danh sách điểm danh từ API
+              Consumer<AttendanceProvider>(
+                builder: (context, provider, child) {
+                  if (provider.isLoading) {
+                    return const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(24.0),
+                        child: CircularProgressIndicator(),
+                      ),
+                    );
+                  }
 
-              _buildAttendanceRecord(
-                context,
-                date: DateTime.now().subtract(const Duration(days: 2)),
-                isPresent: true,
-                subject: 'Cơ sở dữ liệu',
-              ),
-              const Divider(height: 24),
+                  if (provider.error != null) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.error_outline,
+                              color: colorScheme.error,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Không thể tải dữ liệu điểm danh',
+                              style: theme.textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                            const SizedBox(height: 8),
+                            ElevatedButton(
+                              onPressed: () {
+                                provider.fetchAttendanceHistory();
+                              },
+                              child: const Text('Thử lại'),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
 
-              _buildAttendanceRecord(
-                context,
-                date: DateTime.now().subtract(const Duration(days: 3)),
-                isPresent: false,
-                subject: 'Lập trình Web',
+                  final recentAttendance = provider.getRecentAttendance(3);
+
+                  if (recentAttendance.isEmpty) {
+                    return Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(24.0),
+                        child: Column(
+                          children: [
+                            Icon(
+                              Icons.history,
+                              color: colorScheme.outline,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Chưa có dữ liệu điểm danh',
+                              style: theme.textTheme.titleMedium,
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  }
+
+                  return Column(
+                    children: recentAttendance.map((attendance) {
+                      return Column(
+                        children: [
+                          _buildAttendanceRecord(
+                            context,
+                            attendance: attendance,
+                          ),
+                          if (recentAttendance.last != attendance)
+                            const Divider(height: 24),
+                        ],
+                      );
+                    }).toList(),
+                  );
+                },
               ),
 
               const SizedBox(height: 8),
@@ -125,13 +202,12 @@ class AttendanceDetailCard extends StatelessWidget {
 
   Widget _buildAttendanceRecord(
     BuildContext context, {
-    required DateTime date,
-    required bool isPresent,
-    required String subject,
+    required AttendanceHistoryModel attendance,
   }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final statusColor = isPresent ? colorScheme.primary : colorScheme.error;
+    final statusColor =
+        attendance.isPresent ? colorScheme.primary : colorScheme.error;
 
     return Container(
       padding: const EdgeInsets.all(12),
@@ -152,7 +228,7 @@ class AttendanceDetailCard extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: Icon(
-              isPresent ? Icons.check_circle : Icons.cancel,
+              attendance.isPresent ? Icons.check_circle : Icons.cancel,
               color: statusColor,
               size: 20,
             ),
@@ -166,7 +242,7 @@ class AttendanceDetailCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  subject,
+                  attendance.scheduleDetail.courseName,
                   style: theme.textTheme.titleMedium?.copyWith(
                     fontWeight: FontWeight.bold,
                     color: colorScheme.onSurface,
@@ -182,7 +258,8 @@ class AttendanceDetailCard extends StatelessWidget {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      DateFormat('HH:mm • dd/MM/yyyy').format(date),
+                      DateFormat('HH:mm • dd/MM/yyyy')
+                          .format(attendance.timestamp),
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),
@@ -204,7 +281,7 @@ class AttendanceDetailCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              isPresent ? 'Có mặt' : 'Vắng mặt',
+              attendance.isPresent ? 'Có mặt' : 'Vắng mặt',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: statusColor,
                 fontWeight: FontWeight.bold,

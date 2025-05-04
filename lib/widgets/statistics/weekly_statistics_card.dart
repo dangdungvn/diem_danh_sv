@@ -1,8 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:provider/provider.dart';
+import 'package:intl/intl.dart';
 
-class WeeklyStatisticsCard extends StatelessWidget {
+import '../../models/attendance_history_model.dart';
+import '../../providers/attendance_provider.dart';
+
+class WeeklyStatisticsCard extends StatefulWidget {
   const WeeklyStatisticsCard({super.key});
+
+  @override
+  State<WeeklyStatisticsCard> createState() => _WeeklyStatisticsCardState();
+}
+
+class _WeeklyStatisticsCardState extends State<WeeklyStatisticsCard> {
+  int selectedIndex = 0;
+  List<String> periods = ['Tuần này', '7 ngày qua', '30 ngày qua'];
 
   @override
   Widget build(BuildContext context) {
@@ -10,10 +23,10 @@ class WeeklyStatisticsCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
       child: Card(
         elevation: 6,
-        shadowColor: colorScheme.primary.withOpacity(0.3),
+        shadowColor: Colors.black.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -24,274 +37,155 @@ class WeeklyStatisticsCard extends StatelessWidget {
             children: [
               // Tiêu đề section
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                      color: colorScheme.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(12),
-                      boxShadow: [
-                        BoxShadow(
+                  Row(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
                           color: colorScheme.primary.withOpacity(0.1),
-                          blurRadius: 4,
-                          spreadRadius: 1,
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: colorScheme.primary.withOpacity(0.1),
+                              blurRadius: 4,
+                              spreadRadius: 1,
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: Icon(
-                      Icons.show_chart,
-                      color: colorScheme.primary,
-                      size: 20,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Text(
-                    'Thống kê theo tuần',
-                    style: theme.textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      color: colorScheme.onSurface,
-                    ),
+                        child: Icon(
+                          Icons.bar_chart,
+                          color: colorScheme.primary,
+                          size: 20,
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Text(
+                        'Thống kê theo thời gian',
+                        style: theme.textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: colorScheme.onSurface,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 16),
 
-              // Thông tin tỉ lệ cao nhất, thấp nhất
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: colorScheme.outline.withOpacity(0.3),
-                    width: 1,
+              // Buttons chọn khoảng thời gian
+              Row(
+                children: List.generate(
+                  periods.length,
+                  (index) => Padding(
+                    padding: const EdgeInsets.only(right: 8),
+                    child: ChoiceChip(
+                      label: Text(periods[index]),
+                      selected: selectedIndex == index,
+                      onSelected: (selected) {
+                        if (selected) {
+                          setState(() {
+                            selectedIndex = index;
+                          });
+                        }
+                      },
+                      selectedColor: colorScheme.primary.withOpacity(0.2),
+                      labelStyle: TextStyle(
+                        color: selectedIndex == index
+                            ? colorScheme.primary
+                            : colorScheme.onSurfaceVariant,
+                        fontWeight: selectedIndex == index
+                            ? FontWeight.bold
+                            : FontWeight.normal,
+                      ),
+                    ),
                   ),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    Column(
-                      children: [
-                        Text(
-                          'Cao nhất',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.arrow_upward,
-                              color: Colors.green,
-                              size: 16,
-                            ),
-                            Text(
-                              '95%',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.green,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 30,
-                      width: 1,
-                      color: colorScheme.outline.withOpacity(0.3),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'Thấp nhất',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.arrow_downward,
-                              color: Colors.red,
-                              size: 16,
-                            ),
-                            Text(
-                              '80%',
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.red,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 30,
-                      width: 1,
-                      color: colorScheme.outline.withOpacity(0.3),
-                    ),
-                    Column(
-                      children: [
-                        Text(
-                          'Trung bình',
-                          style: theme.textTheme.bodySmall?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '87%',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.bold,
-                            color: colorScheme.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
                 ),
               ),
 
               const SizedBox(height: 24),
 
-              // Biểu đồ đường
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  color: colorScheme.surfaceContainer,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.03),
-                      blurRadius: 4,
-                      spreadRadius: 0,
-                    ),
-                  ],
-                ),
-                padding: const EdgeInsets.all(16),
-                height: 170,
-                child: LineChart(
-                  LineChartData(
-                    gridData: FlGridData(
-                      show: true,
-                      drawVerticalLine: false,
-                      horizontalInterval: 20,
-                      getDrawingHorizontalLine: (value) {
-                        return FlLine(
-                          color: colorScheme.outline.withOpacity(0.2),
-                          strokeWidth: 1,
-                          dashArray: [5, 5],
-                        );
-                      },
-                    ),
-                    titlesData: FlTitlesData(
-                      leftTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          reservedSize: 40,
-                          interval: 20,
-                          getTitlesWidget: (value, meta) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 8),
-                              child: Text(
-                                '${value.toInt()}%',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                              ),
-                            );
-                          },
+              // Biểu đồ điểm danh
+              SizedBox(
+                height: 240,
+                child: Consumer<AttendanceProvider>(
+                  builder: (context, provider, child) {
+                    final attendanceData = provider.attendanceHistory;
+                    if (attendanceData.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.bar_chart,
+                              color: colorScheme.outline,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Chưa có dữ liệu điểm danh',
+                              style: theme.textTheme.titleMedium,
+                            ),
+                          ],
                         ),
-                      ),
-                      bottomTitles: AxisTitles(
-                        sideTitles: SideTitles(
-                          showTitles: true,
-                          getTitlesWidget: (value, meta) {
-                            return Padding(
-                              padding: const EdgeInsets.only(top: 8),
-                              child: Text(
-                                'T${value.toInt() + 2}',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            );
-                          },
+                      );
+                    }
+
+                    // Lấy dữ liệu theo khoảng thời gian được chọn
+                    List<AttendanceHistoryModel> filteredData = [];
+                    final now = DateTime.now();
+
+                    switch (selectedIndex) {
+                      case 0: // Tuần này
+                        final startOfWeek =
+                            now.subtract(Duration(days: now.weekday - 1));
+                        final startDate = DateTime(startOfWeek.year,
+                            startOfWeek.month, startOfWeek.day);
+                        filteredData = attendanceData
+                            .where((a) => a.timestamp.isAfter(startDate))
+                            .toList();
+                        break;
+                      case 1: // 7 ngày qua
+                        final last7Days = now.subtract(const Duration(days: 7));
+                        filteredData = attendanceData
+                            .where((a) => a.timestamp.isAfter(last7Days))
+                            .toList();
+                        break;
+                      case 2: // 30 ngày qua
+                        final last30Days =
+                            now.subtract(const Duration(days: 30));
+                        filteredData = attendanceData
+                            .where((a) => a.timestamp.isAfter(last30Days))
+                            .toList();
+                        break;
+                    }
+
+                    // Nếu không có dữ liệu trong khoảng thời gian đã chọn
+                    if (filteredData.isEmpty) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.bar_chart,
+                              color: colorScheme.outline,
+                              size: 48,
+                            ),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Không có dữ liệu trong khoảng thời gian này',
+                              style: theme.textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                      ),
-                      rightTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                      topTitles: const AxisTitles(
-                        sideTitles: SideTitles(showTitles: false),
-                      ),
-                    ),
-                    borderData: FlBorderData(show: false),
-                    lineBarsData: [
-                      LineChartBarData(
-                        spots: const [
-                          FlSpot(0, 90),
-                          FlSpot(1, 85),
-                          FlSpot(2, 95),
-                          FlSpot(3, 80),
-                          FlSpot(4, 85),
-                        ],
-                        isCurved: true,
-                        color: colorScheme.primary,
-                        barWidth: 3,
-                        isStrokeCapRound: true,
-                        dotData: FlDotData(
-                          show: true,
-                          getDotPainter: (spot, percent, barData, index) {
-                            return FlDotCirclePainter(
-                              radius: 5,
-                              color: colorScheme.primary,
-                              strokeWidth: 2,
-                              strokeColor: colorScheme.surface,
-                            );
-                          },
-                        ),
-                        belowBarData: BarAreaData(
-                          show: true,
-                          gradient: LinearGradient(
-                            colors: [
-                              colorScheme.primary.withOpacity(0.3),
-                              colorScheme.primary.withOpacity(0.05),
-                            ],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                        ),
-                      ),
-                    ],
-                    minY: 0,
-                    maxY: 100,
-                    lineTouchData: LineTouchData(
-                      touchTooltipData: LineTouchTooltipData(
-                        tooltipBgColor: colorScheme.surface,
-                        tooltipRoundedRadius: 8,
-                        getTooltipItems: (touchedSpots) {
-                          return touchedSpots.map((touchedSpot) {
-                            return LineTooltipItem(
-                              '${touchedSpot.y.toInt()}%',
-                              TextStyle(
-                                color: colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          }).toList();
-                        },
-                      ),
-                    ),
-                  ),
+                      );
+                    }
+
+                    return _buildChart(context, filteredData);
+                  },
                 ),
               ),
             ],
@@ -299,5 +193,182 @@ class WeeklyStatisticsCard extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildChart(BuildContext context, List<AttendanceHistoryModel> data) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    // Nhóm dữ liệu theo ngày
+    final Map<String, Map<String, int>> dailyStats = {};
+
+    for (var attendance in data) {
+      final dateKey = DateFormat('yyyy-MM-dd').format(attendance.timestamp);
+      dailyStats[dateKey] ??= {'present': 0, 'absent': 0, 'late': 0};
+
+      if (attendance.isPresent) {
+        if (attendance.isLate) {
+          dailyStats[dateKey]!['late'] =
+              (dailyStats[dateKey]!['late'] ?? 0) + 1;
+        } else {
+          dailyStats[dateKey]!['present'] =
+              (dailyStats[dateKey]!['present'] ?? 0) + 1;
+        }
+      } else {
+        dailyStats[dateKey]!['absent'] =
+            (dailyStats[dateKey]!['absent'] ?? 0) + 1;
+      }
+    }
+
+    // Sắp xếp các ngày
+    final sortedDates = dailyStats.keys.toList()..sort();
+
+    // Giới hạn hiển thị 7 ngày gần nhất nếu có quá nhiều dữ liệu
+    if (sortedDates.length > 7) {
+      sortedDates.removeRange(0, sortedDates.length - 7);
+    }
+
+    return BarChart(
+      BarChartData(
+        alignment: BarChartAlignment.spaceAround,
+        maxY: _calculateMaxY(dailyStats, sortedDates),
+        titlesData: FlTitlesData(
+          show: true,
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                if (value < 0 || value >= sortedDates.length) {
+                  return const SizedBox();
+                }
+
+                final date = DateTime.parse(sortedDates[value.toInt()]);
+                return Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Text(
+                    DateFormat('dd/MM').format(date),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                );
+              },
+            ),
+          ),
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 30,
+              getTitlesWidget: (value, meta) {
+                if (value == 0) {
+                  return const SizedBox();
+                }
+
+                return Text(
+                  value.toInt().toString(),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: colorScheme.onSurfaceVariant,
+                  ),
+                );
+              },
+            ),
+          ),
+          topTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+          rightTitles: const AxisTitles(
+            sideTitles: SideTitles(showTitles: false),
+          ),
+        ),
+        borderData: FlBorderData(
+          show: false,
+        ),
+        barGroups: List.generate(
+          sortedDates.length,
+          (index) {
+            final date = sortedDates[index];
+            final stats = dailyStats[date]!;
+
+            return BarChartGroupData(
+              x: index,
+              barRods: [
+                BarChartRodData(
+                  toY: stats['present']!.toDouble(),
+                  color: colorScheme.primary,
+                  width: 12,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(4),
+                    topRight: Radius.circular(4),
+                  ),
+                ),
+                BarChartRodData(
+                  toY: stats['late']!.toDouble(),
+                  color: Colors.orange,
+                  width: 12,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(4),
+                    topRight: Radius.circular(4),
+                  ),
+                ),
+                BarChartRodData(
+                  toY: stats['absent']!.toDouble(),
+                  color: colorScheme.error,
+                  width: 12,
+                  borderRadius: const BorderRadius.only(
+                    topLeft: Radius.circular(4),
+                    topRight: Radius.circular(4),
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
+        barTouchData: BarTouchData(
+          touchTooltipData: BarTouchTooltipData(
+            tooltipBgColor: colorScheme.surface,
+            tooltipRoundedRadius: 8,
+            getTooltipItem: (group, groupIndex, rod, rodIndex) {
+              String status;
+              switch (rodIndex) {
+                case 0:
+                  status = 'Có mặt';
+                  break;
+                case 1:
+                  status = 'Đi trễ';
+                  break;
+                case 2:
+                  status = 'Vắng mặt';
+                  break;
+                default:
+                  status = '';
+              }
+
+              return BarTooltipItem(
+                '$status: ${rod.toY.toInt()}',
+                TextStyle(
+                  color: colorScheme.onSurface,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            },
+          ),
+        ),
+      ),
+    );
+  }
+
+  double _calculateMaxY(
+      Map<String, Map<String, int>> dailyStats, List<String> dates) {
+    double maxY = 0;
+    for (var date in dates) {
+      final stats = dailyStats[date]!;
+      final total = stats['present']! + stats['late']! + stats['absent']!;
+      if (total > maxY) {
+        maxY = total.toDouble();
+      }
+    }
+
+    // Thêm một khoảng nhỏ để biểu đồ trông đẹp hơn
+    return maxY + 1;
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fl_chart/fl_chart.dart';
-import 'legend_item.dart';
+import 'package:provider/provider.dart';
+import '../../providers/attendance_provider.dart';
 
 class OverviewStatisticsCard extends StatelessWidget {
   const OverviewStatisticsCard({super.key});
@@ -11,10 +11,10 @@ class OverviewStatisticsCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Padding(
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
       child: Card(
         elevation: 6,
-        shadowColor: colorScheme.primary.withOpacity(0.3),
+        shadowColor: Colors.black.withOpacity(0.1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
@@ -25,188 +25,98 @@ class OverviewStatisticsCard extends StatelessWidget {
             children: [
               // Tiêu đề section
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        padding: const EdgeInsets.all(10),
-                        decoration: BoxDecoration(
+                  Container(
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: colorScheme.primary.withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
                           color: colorScheme.primary.withOpacity(0.1),
-                          borderRadius: BorderRadius.circular(12),
-                          boxShadow: [
-                            BoxShadow(
-                              color: colorScheme.primary.withOpacity(0.1),
-                              blurRadius: 4,
-                              spreadRadius: 1,
-                            ),
-                          ],
+                          blurRadius: 4,
+                          spreadRadius: 1,
                         ),
-                        child: Icon(
-                          Icons.pie_chart,
-                          color: colorScheme.primary,
-                          size: 20,
-                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.insert_chart_outlined,
+                      color: colorScheme.primary,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Text(
+                    'Tổng quan',
+                    style: theme.textTheme.titleLarge?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: colorScheme.onSurface,
+                    ),
+                  ),
+                ],
+              ),
+
+              const SizedBox(height: 24),
+
+              // Thống kê tổng quan
+              Consumer<AttendanceProvider>(
+                builder: (context, provider, child) {
+                  // Tính toán số liệu thống kê
+                  final totalAttendance = provider.attendanceHistory.length;
+                  final presentCount = provider.attendanceHistory
+                      .where((a) => a.isPresent)
+                      .length;
+                  final absentCount = totalAttendance - presentCount;
+                  final lateCount =
+                      provider.attendanceHistory.where((a) => a.isLate).length;
+
+                  // Tỷ lệ phần trăm
+                  final presentRate = totalAttendance > 0
+                      ? (presentCount / totalAttendance * 100)
+                          .toStringAsFixed(1)
+                      : '0.0';
+
+                  final lateRate = totalAttendance > 0
+                      ? (lateCount / totalAttendance * 100).toStringAsFixed(1)
+                      : '0.0';
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      // Có mặt
+                      _buildStatItem(
+                        context,
+                        icon: Icons.check_circle,
+                        iconColor: colorScheme.primary,
+                        title: 'Có mặt',
+                        value: '$presentCount',
+                        subtitle: '$presentRate%',
                       ),
-                      const SizedBox(width: 12),
-                      Text(
-                        'Tổng quan',
-                        style: theme.textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: colorScheme.onSurface,
-                        ),
+
+                      // Đi trễ
+                      _buildStatItem(
+                        context,
+                        icon: Icons.watch_later,
+                        iconColor: Colors.orange,
+                        title: 'Đi trễ',
+                        value: '$lateCount',
+                        subtitle: '$lateRate%',
+                      ),
+
+                      // Vắng mặt
+                      _buildStatItem(
+                        context,
+                        icon: Icons.cancel,
+                        iconColor: colorScheme.error,
+                        title: 'Vắng mặt',
+                        value: '$absentCount',
+                        subtitle: totalAttendance > 0
+                            ? '${(absentCount / totalAttendance * 100).toStringAsFixed(1)}%'
+                            : '0.0%',
                       ),
                     ],
-                  ),
-                  // Dropdown chọn môn học
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainer,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Tất cả môn học',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: colorScheme.onSurface,
-                          ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.keyboard_arrow_down,
-                          size: 18,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              // Biểu đồ tròn với tỉ lệ điểm danh
-              Row(
-                children: [
-                  // Biểu đồ tròn
-                  SizedBox(
-                    height: 160,
-                    width: 160,
-                    child: Stack(
-                      children: [
-                        PieChart(
-                          PieChartData(
-                            sections: [
-                              PieChartSectionData(
-                                value: 85,
-                                color: colorScheme.primary,
-                                radius: 40,
-                                title: '',
-                                showTitle: false,
-                              ),
-                              PieChartSectionData(
-                                value: 15,
-                                color: colorScheme.error.withOpacity(0.8),
-                                radius: 30,
-                                title: '',
-                                showTitle: false,
-                              ),
-                            ],
-                            sectionsSpace: 0,
-                            centerSpaceRadius: 50,
-                            centerSpaceColor: Colors.transparent,
-                            borderData: FlBorderData(show: false),
-                          ),
-                        ),
-                        // Hiển thị tỉ lệ ở giữa biểu đồ
-                        Center(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                '85%',
-                                style: theme.textTheme.headlineMedium
-                                    ?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme.primary,
-                                ),
-                              ),
-                              Text(
-                                'Tỉ lệ điểm danh',
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  color: colorScheme.onSurfaceVariant,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  const SizedBox(width: 16),
-
-                  // Thông tin thống kê bên phải
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildStatisticsItem(
-                          context,
-                          icon: Icons.check_circle,
-                          title: 'Có mặt',
-                          value: '17 buổi',
-                          color: colorScheme.primary,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildStatisticsItem(
-                          context,
-                          icon: Icons.cancel,
-                          title: 'Vắng mặt',
-                          value: '3 buổi',
-                          color: colorScheme.error,
-                        ),
-                        const SizedBox(height: 16),
-                        _buildStatisticsItem(
-                          context,
-                          icon: Icons.calendar_month,
-                          title: 'Tổng buổi học',
-                          value: '20 buổi',
-                          color: colorScheme.tertiary,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-
-              const SizedBox(height: 24),
-
-              // Chú thích biểu đồ
-              Container(
-                padding: const EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  color: colorScheme.surfaceContainer,
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    LegendItem(
-                      color: colorScheme.primary,
-                      label: 'Có mặt (85%)',
-                    ),
-                    LegendItem(
-                      color: colorScheme.error.withOpacity(0.8),
-                      label: 'Vắng mặt (15%)',
-                    ),
-                  ],
-                ),
+                  );
+                },
               ),
             ],
           ),
@@ -215,48 +125,53 @@ class OverviewStatisticsCard extends StatelessWidget {
     );
   }
 
-  Widget _buildStatisticsItem(
+  Widget _buildStatItem(
     BuildContext context, {
     required IconData icon,
+    required Color iconColor,
     required String title,
     required String value,
-    required Color color,
+    required String subtitle,
   }) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
 
-    return Row(
+    return Column(
       children: [
         Container(
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: color.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(10),
+            color: iconColor.withOpacity(0.1),
+            shape: BoxShape.circle,
           ),
           child: Icon(
             icon,
-            size: 16,
-            color: color,
+            color: iconColor,
+            size: 24,
           ),
         ),
-        const SizedBox(width: 12),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            Text(
-              value,
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontWeight: FontWeight.bold,
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ],
+        const SizedBox(height: 12),
+        Text(
+          value,
+          style: theme.textTheme.titleLarge?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: colorScheme.onSurface,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          title,
+          style: theme.textTheme.bodyMedium?.copyWith(
+            color: colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(height: 2),
+        Text(
+          subtitle,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: iconColor,
+            fontWeight: FontWeight.bold,
+          ),
         ),
       ],
     );

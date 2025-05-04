@@ -54,7 +54,7 @@ class StatisticsAppBar extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: const Icon(
-                        Icons.bar_chart,
+                        Icons.analytics,
                         color: Colors.white,
                         size: 20,
                       ),
