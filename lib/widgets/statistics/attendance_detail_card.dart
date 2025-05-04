@@ -277,13 +277,13 @@ class _AttendanceDetailCardState extends State<AttendanceDetailCard> {
               vertical: 6,
             ),
             decoration: BoxDecoration(
-              color: statusColor.withOpacity(0.1),
+              color: Colors.orange.withOpacity(0.1),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
-              attendance.isPresent ? 'Có mặt' : 'Vắng mặt',
+              attendance.isLate ? 'Điểm danh muộn' : 'Đã điểm danh',
               style: theme.textTheme.bodySmall?.copyWith(
-                color: statusColor,
+                color: Colors.orange,
                 fontWeight: FontWeight.bold,
               ),
             ),

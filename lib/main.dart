@@ -16,18 +16,24 @@ Future<void> main() async {
   // Tải file .env
   await dotenv.load(fileName: '.env');
 
-  runApp(const MyApp());
+  // Khởi tạo AuthProvider và đợi kiểm tra trạng thái đăng nhập
+  final authProvider = AuthProvider();
+  await authProvider.checkLoginStatus();
+
+  runApp(MyApp(authProvider: authProvider));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AuthProvider authProvider;
+
+  const MyApp({super.key, required this.authProvider});
 
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
       ],
