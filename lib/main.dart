@@ -3,6 +3,7 @@ import 'package:diem_danh_sv/providers/attendance_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:window_manager/window_manager.dart';
 import 'providers/theme_provider.dart';
 import 'providers/auth_provider.dart';
 import 'theme/light_theme.dart';
@@ -12,7 +13,19 @@ import 'routes/app_routes.dart';
 Future<void> main() async {
   // Đảm bảo WidgetsFlutterBinding đã được khởi tạo
   WidgetsFlutterBinding.ensureInitialized();
+  // await windowManager.ensureInitialized();
 
+  // WindowOptions windowOptions = const WindowOptions(
+  //   size: Size(1080, 2400),
+  //   center: true,
+  //   backgroundColor: Colors.transparent,
+  //   // skipTaskbar: false,
+  //   // titleBarStyle: TitleBarStyle.hidden,
+  // );
+  // windowManager.waitUntilReadyToShow(windowOptions, () async {
+  //   await windowManager.show();
+  //   await windowManager.focus();
+  // });
   // Tải file .env
   await dotenv.load(fileName: '.env');
 

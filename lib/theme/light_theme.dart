@@ -26,7 +26,7 @@ ThemeData getLightTheme() {
       outline: Color(0xFFE2E8F0),
       outlineVariant: Color(0xFFF1F5F9),
     ),
-    textTheme: GoogleFonts.poppinsTextTheme().apply(
+    textTheme: GoogleFonts.beVietnamProTextTheme().apply(
       bodyColor: const Color(0xFF1E293B),
       displayColor: const Color(0xFF1E293B),
     ),
@@ -44,7 +44,7 @@ ThemeData getLightTheme() {
       elevation: 6,
       backgroundColor: Colors.white,
       foregroundColor: const Color(0xFF222862),
-      titleTextStyle: GoogleFonts.poppins(
+      titleTextStyle: GoogleFonts.beVietnamPro(
         color: const Color(0xFF222862),
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -65,7 +65,7 @@ ThemeData getLightTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
+        textStyle: GoogleFonts.beVietnamPro(
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -79,7 +79,7 @@ ThemeData getLightTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
+        textStyle: GoogleFonts.beVietnamPro(
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -101,7 +101,7 @@ ThemeData getLightTheme() {
         borderSide: const BorderSide(color: Color(0xFF222862), width: 1.5),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      hintStyle: GoogleFonts.poppins(
+      hintStyle: GoogleFonts.beVietnamPro(
         color: const Color(0xFF64748B),
         fontSize: 14,
       ),
@@ -113,7 +113,7 @@ ThemeData getLightTheme() {
       backgroundColor: Colors.white,
       indicatorColor: const Color(0xFF222862).withOpacity(0.1),
       labelTextStyle: MaterialStateProperty.all(
-        GoogleFonts.poppins(
+        GoogleFonts.beVietnamPro(
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
@@ -141,12 +141,12 @@ ThemeData getLightTheme() {
       selectedColor: const Color(0xFF222862),
       secondarySelectedColor: const Color(0xFF222862),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      labelStyle: GoogleFonts.poppins(
+      labelStyle: GoogleFonts.beVietnamPro(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: const Color(0xFF1E293B),
       ),
-      secondaryLabelStyle: GoogleFonts.poppins(
+      secondaryLabelStyle: GoogleFonts.beVietnamPro(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: Colors.white,

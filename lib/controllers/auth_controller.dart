@@ -34,7 +34,12 @@ class AuthController {
   // Phương thức kiểm tra đã đăng nhập chưa
   Future<bool> isLoggedIn() async {
     final accessToken = await _storage.read(key: 'access_token');
-    return accessToken != null && accessToken.isNotEmpty;
+    print('DEBUG accessToken: '
+        '[32m$accessToken[0m'); // In ra accessToken khi kiểm tra
+    if (accessToken == null) return false;
+    if (accessToken.trim().isEmpty) return false;
+    // Có thể kiểm tra thêm: accessToken có đúng định dạng JWT không?
+    return true;
   }
 
   // Phương thức đăng xuất

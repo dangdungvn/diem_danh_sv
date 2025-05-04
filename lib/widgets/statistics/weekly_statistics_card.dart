@@ -15,7 +15,7 @@ class WeeklyStatisticsCard extends StatefulWidget {
 
 class _WeeklyStatisticsCardState extends State<WeeklyStatisticsCard> {
   int selectedIndex = 0;
-  List<String> periods = ['Tuần này', '7 ngày qua', '30 ngày qua'];
+  List<String> periods = ['Tuần này', '7 ngày qua'];
 
   @override
   Widget build(BuildContext context) {
@@ -244,7 +244,7 @@ class _WeeklyStatisticsCardState extends State<WeeklyStatisticsCard> {
 
                 final date = DateTime.parse(sortedDates[value.toInt()]);
                 return Padding(
-                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 0.0),
                   child: Text(
                     DateFormat('dd/MM').format(date),
                     style: theme.textTheme.bodySmall?.copyWith(

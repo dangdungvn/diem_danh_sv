@@ -26,7 +26,7 @@ ThemeData getDarkTheme() {
       outline: Color(0xFF334155),
       outlineVariant: Color(0xFF1E293B),
     ),
-    textTheme: GoogleFonts.poppinsTextTheme().apply(
+    textTheme: GoogleFonts.beVietnamProTextTheme().apply(
       bodyColor: Colors.white,
       displayColor: Colors.white,
     ),
@@ -45,7 +45,7 @@ ThemeData getDarkTheme() {
       elevation: 6,
       backgroundColor: const Color(0xFF1E293B),
       foregroundColor: Colors.white,
-      titleTextStyle: GoogleFonts.poppins(
+      titleTextStyle: GoogleFonts.beVietnamPro(
         color: Colors.white,
         fontSize: 18,
         fontWeight: FontWeight.w600,
@@ -63,7 +63,7 @@ ThemeData getDarkTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
+        textStyle: GoogleFonts.beVietnamPro(
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -77,7 +77,7 @@ ThemeData getDarkTheme() {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
-        textStyle: GoogleFonts.poppins(
+        textStyle: GoogleFonts.beVietnamPro(
           fontSize: 15,
           fontWeight: FontWeight.w600,
         ),
@@ -99,7 +99,7 @@ ThemeData getDarkTheme() {
         borderSide: const BorderSide(color: Color(0xFF403F8B), width: 1.5),
       ),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-      hintStyle: GoogleFonts.poppins(
+      hintStyle: GoogleFonts.beVietnamPro(
         color: const Color(0xFF94A3B8),
         fontSize: 14,
       ),
@@ -111,7 +111,7 @@ ThemeData getDarkTheme() {
       backgroundColor: const Color(0xFF1E293B),
       indicatorColor: const Color(0xFF403F8B).withOpacity(0.2),
       labelTextStyle: MaterialStateProperty.all(
-        GoogleFonts.poppins(
+        GoogleFonts.beVietnamPro(
           fontWeight: FontWeight.w500,
           fontSize: 12,
           color: Colors.white,
@@ -142,12 +142,12 @@ ThemeData getDarkTheme() {
       selectedColor: const Color(0xFF403F8B),
       secondarySelectedColor: const Color(0xFF403F8B),
       padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      labelStyle: GoogleFonts.poppins(
+      labelStyle: GoogleFonts.beVietnamPro(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: Colors.white,
       ),
-      secondaryLabelStyle: GoogleFonts.poppins(
+      secondaryLabelStyle: GoogleFonts.beVietnamPro(
         fontSize: 13,
         fontWeight: FontWeight.w500,
         color: Colors.white,
