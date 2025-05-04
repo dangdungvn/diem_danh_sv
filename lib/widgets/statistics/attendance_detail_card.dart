@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/attendance_history_model.dart';
 import '../../providers/attendance_provider.dart';
+import '../../views/attendance_detail_page.dart';
 
 class AttendanceDetailCard extends StatefulWidget {
   const AttendanceDetailCard({super.key});
@@ -79,7 +80,11 @@ class _AttendanceDetailCardState extends State<AttendanceDetailCard> {
                   // Nút xem tất cả
                   TextButton.icon(
                     onPressed: () {
-                      // TODO: Implement view all
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => const AttendanceDetailPage(),
+                        ),
+                      );
                     },
                     icon: Icon(
                       Icons.list,
