@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:diem_danh_sv/models/profile_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/user_model.dart';
@@ -48,6 +49,49 @@ class ProfileService {
         }
 
         return User.fromJson(userData);
+      } else {
+        throw Exception('Không thể lấy thông tin người dùng');
+      }
+    } catch (e) {
+      throw Exception('Đã xảy ra lỗi: $e');
+    }
+  }
+
+  Future<ProfileModel> getCurrentUserInfo(String token) async {
+    try {
+      final response = await _dio.get(
+        '$_baseUrl/api/user-info/',
+        options: Options(
+          headers: {'Authorization': 'Bearer $token'},
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> userData = response.data;
+
+        // Fix: Kiểm tra và sửa URL avatar nếu cần
+        if (userData['avatar_url'] != null &&
+            userData['avatar_url'].isNotEmpty) {
+          // Kiểm tra xem avatarUrl đã có http:// hoặc https:// chưa
+          String avatarUrl = userData['avatar_url'];
+          if (!avatarUrl.startsWith('http://') &&
+              !avatarUrl.startsWith('https://')) {
+            // Nếu là đường dẫn tương đối, thêm baseUrl
+            userData['avatar_url'] =
+                '$_baseUrl${avatarUrl.startsWith('/') ? '' : '/'}$avatarUrl';
+          }
+
+          // Đảm bảo chuỗi truy vấn có mốc thời gian để tránh cache
+          if (!userData['avatar_url'].contains('?')) {
+            userData['avatar_url'] =
+                '${userData['avatar_url']}?t=${DateTime.now().millisecondsSinceEpoch}';
+          } else {
+            userData['avatar_url'] =
+                '${userData['avatar_url']}&t=${DateTime.now().millisecondsSinceEpoch}';
+          }
+        }
+
+        return ProfileModel.fromJson(userData);
       } else {
         throw Exception('Không thể lấy thông tin người dùng');
       }

@@ -29,8 +29,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AuthProvider()),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
       ],
-      child: Consumer<ThemeProvider>(
-        builder: (context, themeProvider, child) {
+      child: Consumer2<ThemeProvider, AuthProvider>(
+        builder: (context, themeProvider, authProvider, child) {
           return MaterialApp(
             title: 'Điểm Danh SV',
             debugShowCheckedModeBanner: false,
@@ -38,7 +38,9 @@ class MyApp extends StatelessWidget {
             darkTheme: getDarkTheme(),
             themeMode:
                 themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
-            initialRoute: AppRoutes.login,
+            // Kiểm tra trạng thái đăng nhập để chọn màn hình khởi đầu
+            initialRoute:
+                authProvider.isLoggedIn ? AppRoutes.home : AppRoutes.login,
             routes: AppRoutes.getRoutes(),
             onGenerateRoute: AppRoutes.generateRoute,
           );

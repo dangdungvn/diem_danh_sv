@@ -121,13 +121,13 @@ ThemeData getDarkTheme() {
         const IconThemeData(color: Colors.white),
       ),
       surfaceTintColor: Colors.transparent,
-      elevation: 3,
+      elevation: 6,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: const Color(0xFFF79421),
       foregroundColor: Colors.white,
-      elevation: 4,
+      elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -155,7 +155,7 @@ ThemeData getDarkTheme() {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
-      elevation: 0,
+      elevation: 6,
     ),
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

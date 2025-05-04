@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../models/profile_model.dart';
 import '../../models/user_model.dart';
 import 'package:provider/provider.dart';
 import '../../providers/profile_provider.dart';
@@ -6,11 +7,13 @@ import '../../views/avatar_picker_screen.dart';
 
 class ProfileAppBar extends StatelessWidget {
   final User user;
+  final ProfileModel? profile;
   final VoidCallback onEditProfile;
 
   const ProfileAppBar({
     super.key,
     required this.user,
+    required this.profile,
     required this.onEditProfile,
   });
 
@@ -177,7 +180,7 @@ class ProfileAppBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    'ID: ${user.id}',
+                    'ID: ${profile!.studentInfo.studentCode}',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,

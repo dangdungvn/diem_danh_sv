@@ -41,7 +41,7 @@ ThemeData getLightTheme() {
     ),
     appBarTheme: AppBarTheme(
       centerTitle: true,
-      elevation: 0,
+      elevation: 6,
       backgroundColor: Colors.white,
       foregroundColor: const Color(0xFF222862),
       titleTextStyle: GoogleFonts.poppins(
@@ -57,7 +57,7 @@ ThemeData getLightTheme() {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
-        elevation: 4,
+        elevation: 6,
         backgroundColor: const Color(0xFF222862),
         foregroundColor: Colors.white,
         shadowColor: const Color(0xFF222862).withOpacity(0.2),
@@ -120,13 +120,13 @@ ThemeData getLightTheme() {
       ),
       shadowColor: Colors.black.withOpacity(0.05),
       surfaceTintColor: Colors.transparent,
-      elevation: 3,
+      elevation: 6,
       labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
     ),
     floatingActionButtonTheme: FloatingActionButtonThemeData(
       backgroundColor: const Color(0xFFF79421),
       foregroundColor: Colors.white,
-      elevation: 4,
+      elevation: 6,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
       ),
@@ -154,7 +154,7 @@ ThemeData getLightTheme() {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(30),
       ),
-      elevation: 0,
+      elevation: 6,
     ),
     listTileTheme: const ListTileThemeData(
       contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),

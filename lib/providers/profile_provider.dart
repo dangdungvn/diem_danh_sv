@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:diem_danh_sv/models/profile_model.dart';
 import 'package:flutter/material.dart';
 import '../controllers/profile_controller.dart';
 import '../models/user_model.dart';
@@ -6,10 +7,12 @@ import '../models/user_model.dart';
 class ProfileProvider extends ChangeNotifier {
   final ProfileController _profileController = ProfileController();
   User? _user;
+  ProfileModel? _profile;
   bool _isLoading = false;
   String? _error;
 
   User? get user => _user;
+  ProfileModel? get profile => _profile;
   bool get isLoading => _isLoading;
   String? get error => _error;
 
@@ -21,6 +24,7 @@ class ProfileProvider extends ChangeNotifier {
 
     try {
       _user = await _profileController.getUserProfile();
+      _profile = await _profileController.getUserProfileCurrent();
       _error = null;
     } catch (e) {
       _error = e.toString();

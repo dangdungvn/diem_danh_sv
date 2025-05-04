@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'dart:convert';
+import 'package:diem_danh_sv/models/profile_model.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../services/profile_service.dart';
 import '../controllers/auth_controller.dart';
@@ -29,6 +30,28 @@ class ProfileController {
       print('Lỗi lấy thông tin profile: $e');
       // Nếu có lỗi, thử lấy từ bộ nhớ đệm
       return await _authController.getUserInfo();
+    }
+  }
+
+  Future<ProfileModel?> getUserProfileCurrent() async {
+    try {
+      final token = await _authController.getAccessToken();
+
+      if (token == null) {
+        return null;
+      }
+
+      final user = await _profileService.getCurrentUserInfo(token);
+
+      // Cập nhật thông tin trong storage
+      await _storage.write(
+          key: 'user_info_current', value: json.encode(user.toJson()));
+
+      return user;
+    } catch (e) {
+      print('Lỗi lấy thông tin profile: $e');
+      // Nếu có lỗi, thử lấy từ bộ nhớ đệm
+      return await _authController.getUserInfoCurrent();
     }
   }
 

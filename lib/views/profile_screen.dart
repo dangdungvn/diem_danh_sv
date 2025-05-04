@@ -1,7 +1,9 @@
+import 'package:diem_danh_sv/models/profile_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/profile_provider.dart';
 import '../models/user_model.dart';
+import '../routes/app_routes.dart';
 import '../widgets/profile/profile_app_bar.dart';
 import '../widgets/profile/profile_stat_card.dart';
 import '../widgets/profile/profile_info_section.dart';
@@ -37,6 +39,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       body: Consumer<ProfileProvider>(
         builder: (context, profileProvider, child) {
           final User? user = profileProvider.user;
+          final ProfileModel? profile = profileProvider.profile;
 
           if (profileProvider.isLoading && user == null) {
             return const Center(child: CircularProgressIndicator());
@@ -71,6 +74,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 // Header với avatar và thông tin cơ bản
                 ProfileAppBar(
                   user: user,
+                  profile: profile,
                   onEditProfile: () {
                     Navigator.push(
                       context,
@@ -246,7 +250,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             onPressed: () {
               Navigator.pop(context);
               // Thực hiện đăng xuất
-              Provider.of<AuthProvider>(context, listen: false).logout();
+              Provider.of<AuthProvider>(context, listen: false)
+                  .logout()
+                  .then((_) {
+                // Chuyển về màn hình đăng nhập sau khi đăng xuất
+                Navigator.pushNamedAndRemoveUntil(
+                    context, AppRoutes.login, (route) => false);
+              });
             },
             child: const Text('Đăng xuất'),
           ),

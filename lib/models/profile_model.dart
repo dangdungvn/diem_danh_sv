@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-class User {
+class ProfileModel {
   final int id;
   final String email;
   final String name;
@@ -11,10 +11,10 @@ class User {
   final String? avatar;
   final String? avatarUrl;
   final String? bio;
-  final bool isActive;
-  final String dateJoined;
+  final StudentInfo studentInfo;
+  final dynamic teacherInfo;
 
-  User({
+  ProfileModel({
     required this.id,
     required this.email,
     required this.name,
@@ -25,11 +25,11 @@ class User {
     this.avatar,
     this.avatarUrl,
     this.bio,
-    required this.isActive,
-    required this.dateJoined,
+    required this.studentInfo,
+    this.teacherInfo,
   });
 
-  factory User.fromJson(dynamic data) {
+  factory ProfileModel.fromJson(dynamic data) {
     // Handle the case when data is a string
     Map<String, dynamic> json;
     if (data is String) {
@@ -45,7 +45,7 @@ class User {
           'User data must be a string or map, got ${data.runtimeType}');
     }
 
-    return User(
+    return ProfileModel(
       id: json['id'] ?? 0,
       email: json['email'] ?? '',
       name: json['name'] ?? '',
@@ -56,8 +56,8 @@ class User {
       avatar: json['avatar'],
       avatarUrl: json['avatar_url'],
       bio: json['bio'],
-      isActive: json['is_active'] ?? false,
-      dateJoined: json['date_joined'] ?? '',
+      studentInfo: StudentInfo.fromJson(json['student_info']),
+      teacherInfo: json['teacher_info'],
     );
   }
 
@@ -73,8 +73,28 @@ class User {
       'avatar': avatar,
       'avatar_url': avatarUrl,
       'bio': bio,
-      'is_active': isActive,
-      'date_joined': dateJoined,
+      'student_info': studentInfo.toJson(),
+      'teacher_info': teacherInfo,
     };
   }
+}
+
+class StudentInfo {
+  final String studentCode;
+  final int classesCount;
+
+  StudentInfo({
+    required this.studentCode,
+    required this.classesCount,
+  });
+
+  factory StudentInfo.fromJson(Map<String, dynamic> json) => StudentInfo(
+        studentCode: json["student_code"],
+        classesCount: json["classes_count"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "student_code": studentCode,
+        "classes_count": classesCount,
+      };
 }

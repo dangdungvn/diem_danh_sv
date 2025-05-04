@@ -53,6 +53,8 @@ class AuthService {
       } else {
         throw Exception('Không thể lấy thông tin người dùng');
       }
+    } on DioException catch (e) {
+      throw Exception('Lỗi lấy thông tin người dùng: ${e.message}');
     } catch (e) {
       throw Exception('Đã xảy ra lỗi: $e');
     }
