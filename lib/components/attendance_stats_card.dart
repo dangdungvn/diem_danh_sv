@@ -254,12 +254,12 @@ class _AttendanceStatsCardState extends State<AttendanceStatsCard> {
                                 ),
                               ),
                               const SizedBox(height: 4),
-                              // Text(
-                              //   'Học kỳ Xuân 2025',
-                              //   style: theme.textTheme.bodyMedium?.copyWith(
-                              //     color: colorScheme.onSurfaceVariant,
-                              //   ),
-                              // ),
+                              Text(
+                                'Thống kê điểm danh theo thời gian',
+                                style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: colorScheme.onSurfaceVariant,
+                                ),
+                              ),
                             ],
                           ),
                         ],
