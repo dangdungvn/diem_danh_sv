@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner_plus/qr_code_scanner_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:diem_danh_sv/views/qr_image_process_page.dart';
 
