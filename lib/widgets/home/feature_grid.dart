@@ -3,6 +3,7 @@ import '../../components/feature_card.dart';
 import '../../views/profile_screen.dart';
 import '../../views/schedule_screen.dart';
 import '../../views/statistics_screen.dart';
+import '../../views/classes_screen.dart';
 
 class FeatureGrid extends StatelessWidget {
   const FeatureGrid({super.key});
@@ -79,7 +80,12 @@ class FeatureGrid extends StatelessWidget {
           title: 'Môn học',
           description: 'Danh sách các môn học',
           onTap: () {
-            // TODO: Implement courses screen
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ClassesScreen(),
+              ),
+            );
           },
           backgroundColor: colorScheme.primary.withOpacity(0.1),
           iconColor: colorScheme.primary,

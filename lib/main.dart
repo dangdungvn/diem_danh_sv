@@ -1,3 +1,4 @@
+import 'package:diem_danh_sv/providers/class_provider.dart';
 import 'package:diem_danh_sv/providers/profile_provider.dart';
 import 'package:diem_danh_sv/providers/attendance_provider.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
         ChangeNotifierProvider(create: (_) => ScheduleProvider()),
+        ChangeNotifierProvider(create: (_) => ClassProvider())
       ],
       child: Consumer2<ThemeProvider, AuthProvider>(
         builder: (context, themeProvider, authProvider, child) {
