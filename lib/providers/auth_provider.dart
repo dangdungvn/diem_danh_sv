@@ -13,12 +13,10 @@ class AuthProvider with ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get error => _error;
   User? get user => _user;
-
   AuthProvider() {
-    // Kiểm tra trạng thái đăng nhập khi khởi tạo
-    checkLoginStatus();
+    // Constructor doesn't automatically check login status anymore
+    // This will be explicitly called after clearing the access token
   }
-
   Future<void> checkLoginStatus() async {
     _isLoading = true;
     notifyListeners();
@@ -34,6 +32,13 @@ class AuthProvider with ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  // Xóa access token
+  Future<void> clearAccessToken() async {
+    await _authController.clearAccessToken();
+    _isLoggedIn = false;
+    notifyListeners();
   }
 
   Future<bool> login(String email, String password) async {
@@ -76,5 +81,30 @@ class AuthProvider with ChangeNotifier {
   void clearError() {
     _error = null;
     notifyListeners();
+  }
+
+  // Làm mới access token
+  Future<bool> refreshAccessToken() async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final success = await _authController.refreshAccessToken();
+      if (success) {
+        _user = await _authController.getUserInfo();
+        _isLoggedIn = true;
+      } else {
+        _isLoggedIn = false;
+      }
+      return success;
+    } catch (e) {
+      _error = e.toString();
+      _isLoggedIn = false;
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

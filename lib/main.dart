@@ -3,6 +3,7 @@ import 'package:diem_danh_sv/providers/attendance_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'providers/schedule_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/auth_provider.dart';
 import 'theme/light_theme.dart';
@@ -30,7 +31,14 @@ Future<void> main() async {
 
   // Khởi tạo AuthProvider và đợi kiểm tra trạng thái đăng nhập
   final authProvider = AuthProvider();
-  await authProvider.checkLoginStatus();
+
+  // Làm mới access token khi khởi động app để tạo phiên đăng nhập mới
+  final refreshed = await authProvider.refreshAccessToken();
+
+  // Nếu không làm mới được thì kiểm tra trạng thái đăng nhập bình thường
+  if (!refreshed) {
+    await authProvider.checkLoginStatus();
+  }
 
   runApp(MyApp(authProvider: authProvider));
 }
@@ -48,6 +56,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider.value(value: authProvider),
         ChangeNotifierProvider(create: (_) => ProfileProvider()),
         ChangeNotifierProvider(create: (_) => AttendanceProvider()),
+        ChangeNotifierProvider(create: (_) => ScheduleProvider()),
       ],
       child: Consumer2<ThemeProvider, AuthProvider>(
         builder: (context, themeProvider, authProvider, child) {

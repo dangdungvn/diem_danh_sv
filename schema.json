@@ -509,7 +509,8 @@
                                 "$ref": "#/components/schemas/ScheduleRequest"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "security": [
                     {
@@ -604,7 +605,8 @@
                                 "$ref": "#/components/schemas/ScheduleRequest"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "security": [
                     {
@@ -748,7 +750,8 @@
                                 "$ref": "#/components/schemas/ScheduleRequest"
                             }
                         }
-                    }
+                    },
+                    "required": true
                 },
                 "security": [
                     {
@@ -791,7 +794,35 @@
                         "content": {
                             "application/json": {
                                 "schema": {
-                                    "$ref": "#/components/schemas/StudentSchedule"
+                                    "$ref": "#/components/schemas/Schedule"
+                                }
+                            }
+                        },
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/api/core/schedules/teacher_schedule/": {
+            "get": {
+                "operationId": "api_core_schedules_teacher_schedule_retrieve",
+                "tags": [
+                    "api"
+                ],
+                "security": [
+                    {
+                        "jwtAuth": []
+                    },
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/Schedule"
                                 }
                             }
                         },
@@ -4206,6 +4237,23 @@
                 "type": "string",
                 "description": "* `M` - Nam\n* `F` - Nữ\n* `O` - Khác"
             },
+            "LessonStartEnum": {
+                "enum": [
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11
+                ],
+                "type": "integer",
+                "description": "* `1` - Tiết 1 (07:00 - 07:45)\n* `2` - Tiết 2 (07:50 - 08:35)\n* `3` - Tiết 3 (08:40 - 09:25)\n* `4` - Tiết 4 (09:30 - 10:15)\n* `5` - Tiết 5 (10:20 - 11:05)\n* `6` - Tiết 6 (12:45 - 13:30)\n* `7` - Tiết 7 (13:35 - 14:20)\n* `8` - Tiết 8 (14:25 - 15:10)\n* `9` - Tiết 9 (15:15 - 16:00)\n* `10` - Tiết 10 (16:05 - 16:50)\n* `11` - Tiết 11 (16:55 - 17:40)"
+            },
             "NullEnum": {
                 "enum": [
                     null
@@ -4316,6 +4364,29 @@
             "PatchedScheduleRequest": {
                 "type": "object",
                 "properties": {
+                    "teacher": {
+                        "type": "integer"
+                    },
+                    "room": {
+                        "type": "integer"
+                    },
+                    "lesson_start": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LessonStartEnum"
+                            }
+                        ],
+                        "title": "Tiết bắt đầu",
+                        "minimum": 0,
+                        "maximum": 9223372036854776000
+                    },
+                    "lesson_count": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Số tiết"
+                    },
                     "start_time": {
                         "type": "string",
                         "format": "date-time",
@@ -4325,6 +4396,23 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true
+                    },
+                    "weekdays": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "is_active": {
+                        "type": "boolean"
                     }
                 }
             },
@@ -4419,21 +4507,36 @@
                         "type": "integer",
                         "readOnly": true
                     },
-                    "teacher_name": {
-                        "type": "string",
-                        "readOnly": true
+                    "teacher": {
+                        "type": "integer"
                     },
                     "course_name": {
                         "type": "string",
                         "readOnly": true
                     },
-                    "room_name": {
-                        "type": "string",
-                        "readOnly": true
+                    "room": {
+                        "type": "integer"
                     },
                     "class_name": {
                         "type": "string",
                         "readOnly": true
+                    },
+                    "lesson_start": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LessonStartEnum"
+                            }
+                        ],
+                        "title": "Tiết bắt đầu",
+                        "minimum": 0,
+                        "maximum": 9223372036854776000
+                    },
+                    "lesson_count": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Số tiết"
                     },
                     "start_time": {
                         "type": "string",
@@ -4444,14 +4547,42 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true
+                    },
+                    "weekdays": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "is_active": {
+                        "type": "boolean"
+                    },
+                    "teacher_name": {
+                        "type": "string",
+                        "readOnly": true
+                    },
+                    "room_name": {
+                        "type": "string",
+                        "readOnly": true
                     }
                 },
                 "required": [
                     "class_name",
                     "course_name",
                     "id",
+                    "room",
                     "room_name",
-                    "teacher_name"
+                    "teacher",
+                    "teacher_name",
+                    "weekdays"
                 ]
             },
             "ScheduleDetail": {
@@ -4576,6 +4707,29 @@
             "ScheduleRequest": {
                 "type": "object",
                 "properties": {
+                    "teacher": {
+                        "type": "integer"
+                    },
+                    "room": {
+                        "type": "integer"
+                    },
+                    "lesson_start": {
+                        "allOf": [
+                            {
+                                "$ref": "#/components/schemas/LessonStartEnum"
+                            }
+                        ],
+                        "title": "Tiết bắt đầu",
+                        "minimum": 0,
+                        "maximum": 9223372036854776000
+                    },
+                    "lesson_count": {
+                        "type": "integer",
+                        "maximum": 9223372036854776000,
+                        "minimum": 0,
+                        "format": "int64",
+                        "title": "Số tiết"
+                    },
                     "start_time": {
                         "type": "string",
                         "format": "date-time",
@@ -4585,8 +4739,30 @@
                         "type": "string",
                         "format": "date-time",
                         "nullable": true
+                    },
+                    "weekdays": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        }
+                    },
+                    "start_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "end_date": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "is_active": {
+                        "type": "boolean"
                     }
-                }
+                },
+                "required": [
+                    "room",
+                    "teacher",
+                    "weekdays"
+                ]
             },
             "SendEmailReset": {
                 "type": "object",
@@ -4728,53 +4904,6 @@
                         "maxLength": 100
                     }
                 }
-            },
-            "StudentSchedule": {
-                "type": "object",
-                "properties": {
-                    "id": {
-                        "type": "integer",
-                        "readOnly": true
-                    },
-                    "teacher_name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "course_name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "room_name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "class_name": {
-                        "type": "string",
-                        "readOnly": true
-                    },
-                    "start_time": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                    },
-                    "end_time": {
-                        "type": "string",
-                        "format": "date-time",
-                        "nullable": true
-                    },
-                    "is_present": {
-                        "type": "string",
-                        "readOnly": true
-                    }
-                },
-                "required": [
-                    "class_name",
-                    "course_name",
-                    "id",
-                    "is_present",
-                    "room_name",
-                    "teacher_name"
-                ]
             },
             "Teacher": {
                 "type": "object",

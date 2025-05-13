@@ -238,71 +238,71 @@ class ClassScheduleCard extends StatelessWidget {
                 bottomRight: Radius.circular(20),
               ),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: colorScheme.primary.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Row(
-                    children: [
-                      Icon(
-                        Icons.qr_code_scanner,
-                        size: 16,
-                        color: colorScheme.primary,
-                      ),
-                      const SizedBox(width: 6),
-                      Text(
-                        'Điểm danh',
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          fontWeight: FontWeight.w600,
-                          color: colorScheme.primary,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        // TODO: Implement
-                      },
-                      icon: Icon(
-                        Icons.notifications_none,
-                        color: colorScheme.onSurfaceVariant,
-                        size: 20,
-                      ),
-                      style: IconButton.styleFrom(
-                        backgroundColor: colorScheme.surface,
-                        padding: const EdgeInsets.all(8),
-                      ),
-                    ),
-                    const SizedBox(width: 8),
-                    IconButton(
-                      onPressed: () {
-                        // TODO: Implement
-                      },
-                      icon: Icon(
-                        Icons.more_vert,
-                        color: colorScheme.onSurfaceVariant,
-                        size: 20,
-                      ),
-                      style: IconButton.styleFrom(
-                        backgroundColor: colorScheme.surface,
-                        padding: const EdgeInsets.all(8),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            // child: Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Container(
+            //       padding: const EdgeInsets.symmetric(
+            //         horizontal: 16,
+            //         vertical: 8,
+            //       ),
+            //       decoration: BoxDecoration(
+            //         color: colorScheme.primary.withOpacity(0.1),
+            //         borderRadius: BorderRadius.circular(12),
+            //       ),
+            //       child: Row(
+            //         children: [
+            //           Icon(
+            //             Icons.qr_code_scanner,
+            //             size: 16,
+            //             color: colorScheme.primary,
+            //           ),
+            //           const SizedBox(width: 6),
+            //           Text(
+            //             'Điểm danh',
+            //             style: theme.textTheme.bodyMedium?.copyWith(
+            //               fontWeight: FontWeight.w600,
+            //               color: colorScheme.primary,
+            //             ),
+            //           ),
+            //         ],
+            //       ),
+            //     ),
+            //     Row(
+            //       children: [
+            //         IconButton(
+            //           onPressed: () {
+            //             // TODO: Implement
+            //           },
+            //           icon: Icon(
+            //             Icons.notifications_none,
+            //             color: colorScheme.onSurfaceVariant,
+            //             size: 20,
+            //           ),
+            //           style: IconButton.styleFrom(
+            //             backgroundColor: colorScheme.surface,
+            //             padding: const EdgeInsets.all(8),
+            //           ),
+            //         ),
+            //         const SizedBox(width: 8),
+            //         IconButton(
+            //           onPressed: () {
+            //             // TODO: Implement
+            //           },
+            //           icon: Icon(
+            //             Icons.more_vert,
+            //             color: colorScheme.onSurfaceVariant,
+            //             size: 20,
+            //           ),
+            //           style: IconButton.styleFrom(
+            //             backgroundColor: colorScheme.surface,
+            //             padding: const EdgeInsets.all(8),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ],
+            // ),
           ),
         ],
       ),

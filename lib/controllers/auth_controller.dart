@@ -51,6 +51,12 @@ class AuthController {
     // Xóa tất cả dữ liệu trong secure storage
   }
 
+  // Phương thức xóa access token
+  Future<void> clearAccessToken() async {
+    await _storage.delete(key: 'access_token');
+    print('Access token đã được xóa');
+  }
+
   // Phương thức lấy token
   Future<String?> getAccessToken() async {
     return await _storage.read(key: 'access_token');
@@ -87,5 +93,36 @@ class AuthController {
       }
     }
     return null;
+  }
+
+  // Phương thức làm mới access token khi khởi động app
+  Future<bool> refreshAccessToken() async {
+    try {
+      final refreshToken = await _storage.read(key: 'refresh_token');
+
+      // Nếu không có refresh token thì không thể làm mới
+      if (refreshToken == null || refreshToken.isEmpty) {
+        print('Không có refresh token để làm mới phiên đăng nhập');
+        return false;
+      }
+
+      // Gọi API để làm mới token
+      final AuthModel newAuth = await _authService.refreshToken(refreshToken);
+
+      // Lưu access token mới vào secure storage
+      await _storage.write(key: 'access_token', value: newAuth.accessToken);
+
+      // Cập nhật thông tin người dùng nếu cần
+      final User user = await _authService.getUserInfo(newAuth.accessToken);
+      await _storage.write(key: 'user_info', value: jsonEncode(user.toJson()));
+
+      print('Access token đã được làm mới thành công');
+      return true;
+    } catch (e) {
+      print('Lỗi khi làm mới access token: $e');
+      // Xóa token cũ nếu refresh thất bại
+      await clearAccessToken();
+      return false;
+    }
   }
 }
