@@ -40,10 +40,11 @@ class StudentAppBar extends StatelessWidget {
                 color: Colors.white.withOpacity(0.2),
                 borderRadius: BorderRadius.circular(8),
               ),
-              child: const Icon(
-                Icons.school,
-                color: Colors.white,
-                size: 18,
+              child: Image.asset(
+                'assets/images/logo.jpg',
+                width: 24,
+                height: 24,
+                fit: BoxFit.cover,
               ),
             ),
             const SizedBox(width: 8),

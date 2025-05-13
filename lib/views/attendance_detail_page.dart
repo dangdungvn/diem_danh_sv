@@ -388,15 +388,18 @@ class _AttendanceDetailPageState extends State<AttendanceDetailPage> {
                     'Thời gian điểm danh',
                     DateFormat('HH:mm dd/MM/yyyy')
                         .format(attendance.timestamp)),
-                if (attendance.isLate && attendance.minutesLate > 0)
+                if (attendance.isLate &&
+                    attendance.minutesLate != null &&
+                    attendance.minutesLate! > 0)
                   _buildDetailRow(Icons.timer_off, 'Số phút muộn',
                       '${attendance.minutesLate} phút',
                       color: Colors.orange),
                 _buildDetailRow(Icons.info_outline, 'Trạng thái',
                     attendance.attendanceStatus),
-                if (attendance.location.isNotEmpty)
+                if (attendance.location != null &&
+                    attendance.location!.isNotEmpty)
                   _buildDetailRow(
-                      Icons.location_on, 'Vị trí', attendance.location),
+                      Icons.location_on, 'Vị trí', attendance.location!),
                 if (attendance.deviceInfo.isNotEmpty)
                   _buildDetailRow(
                       Icons.devices, 'Thiết bị', attendance.deviceInfo),
@@ -549,7 +552,9 @@ class _AttendanceDetailItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            if (attendance.isLate && attendance.minutesLate > 0)
+            if (attendance.isLate &&
+                attendance.minutesLate != null &&
+                attendance.minutesLate! > 0)
               Row(
                 children: [
                   const Icon(Icons.timer_off, size: 18, color: Colors.orange),
@@ -559,7 +564,7 @@ class _AttendanceDetailItem extends StatelessWidget {
                           ?.copyWith(color: Colors.orange)),
                 ],
               ),
-            if (attendance.location.isNotEmpty)
+            if (attendance.location != null && attendance.location!.isNotEmpty)
               Padding(
                 padding: const EdgeInsets.only(top: 8),
                 child: Row(
@@ -568,7 +573,7 @@ class _AttendanceDetailItem extends StatelessWidget {
                         size: 18, color: colorScheme.primary),
                     const SizedBox(width: 6),
                     Expanded(
-                        child: Text(attendance.location,
+                        child: Text(attendance.location!,
                             style: theme.textTheme.bodyMedium)),
                   ],
                 ),

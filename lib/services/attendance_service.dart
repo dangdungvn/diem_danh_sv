@@ -11,9 +11,7 @@ class AttendanceService {
   AttendanceService() {
     _baseUrl = dotenv.env['API_URL'] ??
         'http://34.143.254.122'; // Lấy URL từ .env hoặc dùng giá trị mặc định
-  }
-
-  // Lấy lịch sử điểm danh
+  } // Lấy lịch sử điểm danh
   Future<List<AttendanceHistoryModel>> getAttendanceHistory(
       String token) async {
     try {
@@ -25,20 +23,31 @@ class AttendanceService {
       );
 
       if (response.statusCode == 200) {
-        if (response.data is List) {
-          return (response.data as List)
-              .map((item) => AttendanceHistoryModel.fromJson(item))
-              .toList();
-        } else {
-          final List<dynamic> results = response.data['results'] ?? [];
-          return results
-              .map((item) => AttendanceHistoryModel.fromJson(item))
-              .toList();
+        try {
+          if (response.data is List) {
+            final List<dynamic> dataList = response.data;
+            // In dữ liệu để debug
+            print('Dữ liệu JSON trả về: $dataList');
+            return dataList
+                .map((item) => AttendanceHistoryModel.fromJson(item))
+                .toList();
+          } else {
+            final List<dynamic> results = response.data['results'] ?? [];
+            print('Dữ liệu JSON trả về: $results');
+            return results
+                .map((item) => AttendanceHistoryModel.fromJson(item))
+                .toList();
+          }
+        } catch (parseError) {
+          print('Lỗi khi phân tích dữ liệu JSON: $parseError');
+          throw Exception('Lỗi khi xử lý dữ liệu: $parseError');
         }
       } else {
-        throw Exception('Không thể lấy lịch sử điểm danh');
+        throw Exception(
+            'Không thể lấy lịch sử điểm danh. Mã lỗi: ${response.statusCode}');
       }
     } catch (e) {
+      print('Chi tiết lỗi lấy lịch sử điểm danh: $e');
       throw Exception('Đã xảy ra lỗi khi lấy lịch sử điểm danh: $e');
     }
   } // Điểm danh bằng mã QR

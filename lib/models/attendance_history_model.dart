@@ -19,12 +19,12 @@ class AttendanceHistoryModel {
   final String timestampVn;
   final bool isPresent;
   final bool isLate;
-  final int minutesLate;
-  final double latitude;
-  final double longitude;
+  final int? minutesLate;
+  final double? latitude;
+  final double? longitude;
   final String deviceInfo;
   final String attendanceStatus;
-  final String location;
+  final String? location;
 
   AttendanceHistoryModel({
     required this.id,
@@ -41,7 +41,6 @@ class AttendanceHistoryModel {
     required this.attendanceStatus,
     required this.location,
   });
-
   factory AttendanceHistoryModel.fromJson(Map<String, dynamic> json) =>
       AttendanceHistoryModel(
         id: json["id"],
@@ -54,7 +53,7 @@ class AttendanceHistoryModel {
         minutesLate: json["minutes_late"],
         latitude: json["latitude"]?.toDouble(),
         longitude: json["longitude"]?.toDouble(),
-        deviceInfo: json["device_info"],
+        deviceInfo: json["device_info"] ?? "",
         attendanceStatus: json["attendance_status"],
         location: json["location"],
       );

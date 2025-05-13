@@ -3,7 +3,6 @@ import 'package:diem_danh_sv/providers/attendance_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:window_manager/window_manager.dart';
 import 'providers/theme_provider.dart';
 import 'providers/auth_provider.dart';
 import 'theme/light_theme.dart';
