@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:diem_danh_sv/views/qr_image_process_page.dart';
 
 class QRScanButton extends StatelessWidget {
   const QRScanButton({super.key});
@@ -8,9 +10,8 @@ class QRScanButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-
     return Container(
-      height: MediaQuery.of(context).size.height * 0.28,
+      height: MediaQuery.of(context).size.height * 0.4, // Tăng chiều cao
       decoration: BoxDecoration(
         color: colorScheme.surface,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
@@ -94,6 +95,43 @@ class QRScanButton extends StatelessWidget {
                       ),
                       backgroundColor: colorScheme.primary,
                       foregroundColor: colorScheme.onPrimary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12), // Nút tải ảnh QR từ thư viện
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Row(
+              children: [
+                Expanded(
+                  child: OutlinedButton.icon(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/qr-image-process');
+                    },
+                    icon: Icon(
+                      Icons.photo_library,
+                      size: 22,
+                      color: colorScheme.primary,
+                    ),
+                    label: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 12),
+                      child: Text(
+                        'Tải ảnh QR từ thư viện',
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      side: BorderSide(color: colorScheme.primary, width: 1.5),
                     ),
                   ),
                 ),
@@ -371,7 +409,7 @@ class _QRScannerViewState extends State<QRScannerView>
                     icon: Icons.photo_library,
                     label: 'Thư viện',
                     onTap: () {
-                      // TODO: Implement gallery QR scan
+                      _pickImageFromGallery(context);
                     },
                   ),
                 ],
@@ -460,5 +498,21 @@ class _QRScannerViewState extends State<QRScannerView>
         });
       }
     });
+  }
+
+  void _pickImageFromGallery(BuildContext context) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? image = await picker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 100,
+    );
+
+    if (image != null && context.mounted) {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => QrImageProcessPage(imagePath: image.path),
+        ),
+      );
+    }
   }
 }

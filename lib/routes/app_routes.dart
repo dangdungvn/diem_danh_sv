@@ -5,6 +5,7 @@ import '../views/schedule_screen.dart';
 import '../views/statistics_screen.dart';
 import '../views/login_screen.dart';
 import '../views/qr_scanner_page.dart';
+import '../views/qr_image_process_page.dart';
 
 class AppRoutes {
   static const String login = '/login';
@@ -13,6 +14,7 @@ class AppRoutes {
   static const String schedule = '/schedule';
   static const String statistics = '/statistics';
   static const String qrScanner = '/qr-scanner';
+  static const String qrImageProcess = '/qr-image-process';
 
   static Map<String, WidgetBuilder> getRoutes() {
     return {
@@ -22,6 +24,10 @@ class AppRoutes {
       schedule: (context) => const ScheduleScreen(),
       statistics: (context) => const StatisticsScreen(),
       qrScanner: (context) => const QrScannerPage(),
+      qrImageProcess: (context) {
+        // Không truyền tham số imagePath để hiển thị hộp thoại chọn ảnh
+        return const QrImageProcessPage();
+      },
     };
   }
 
