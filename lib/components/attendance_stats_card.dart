@@ -1,8 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../views/statistics_screen.dart';
+import '../providers/attendance_provider.dart';
 
-class AttendanceStatsCard extends StatelessWidget {
+class AttendanceStatsCard extends StatefulWidget {
   const AttendanceStatsCard({super.key});
+
+  @override
+  State<AttendanceStatsCard> createState() => _AttendanceStatsCardState();
+}
+
+class _AttendanceStatsCardState extends State<AttendanceStatsCard> {
+  @override
+  void initState() {
+    super.initState();
+    // Tải dữ liệu điểm danh khi widget được tạo
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Provider.of<AttendanceProvider>(context, listen: false)
+          .fetchAttendanceHistory();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,117 +111,240 @@ class AttendanceStatsCard extends StatelessWidget {
             const SizedBox(height: 20),
 
             // Thanh tiến trình điểm danh
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: colorScheme.surfaceContainer,
-                borderRadius: BorderRadius.circular(16),
-                boxShadow: [
-                  BoxShadow(
-                    color: colorScheme.onSurface.withOpacity(0.03),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                  ),
-                ],
-              ),
-              child: Column(
-                children: [
-                  // Tỉ lệ điểm danh
-                  Row(
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: colorScheme.primary.withOpacity(0.1),
-                          shape: BoxShape.circle,
+            Consumer<AttendanceProvider>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                if (provider.error != null) {
+                  return Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainer,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.onSurface.withOpacity(0.03),
+                          blurRadius: 10,
+                          spreadRadius: 0,
                         ),
-                        child: Center(
-                          child: Text(
-                            '85%',
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: colorScheme.primary,
+                      ],
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.error_outline,
+                            color: colorScheme.error,
+                            size: 28,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Không thể tải dữ liệu điểm danh',
+                            style: theme.textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 8),
+                          TextButton(
+                            onPressed: () => provider.fetchAttendanceHistory(),
+                            child: const Text('Thử lại'),
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+
+                // Tính toán tỷ lệ điểm danh
+                final attendanceHistory = provider.attendanceHistory;
+                final totalAttendance = attendanceHistory.length;
+
+                if (totalAttendance == 0) {
+                  return Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surfaceContainer,
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: colorScheme.onSurface.withOpacity(0.03),
+                          blurRadius: 10,
+                          spreadRadius: 0,
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Column(
+                        children: [
+                          Icon(
+                            Icons.calendar_today,
+                            color: colorScheme.outline,
+                            size: 28,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(
+                            'Chưa có dữ liệu điểm danh',
+                            style: theme.textTheme.bodyMedium,
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+                final presentCount =
+                    attendanceHistory.where((a) => a.isPresent).length;
+                final attendanceRate = totalAttendance > 0
+                    ? (presentCount / totalAttendance * 100)
+                    : 0.0;
+
+                final presentPercent = attendanceRate.toStringAsFixed(1);
+                final progressValue = attendanceRate / 100;
+
+                return Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: colorScheme.surfaceContainer,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: colorScheme.onSurface.withOpacity(0.03),
+                        blurRadius: 10,
+                        spreadRadius: 0,
+                      ),
+                    ],
+                  ),
+                  child: Column(
+                    children: [
+                      // Tỉ lệ điểm danh
+                      Row(
+                        children: [
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary.withOpacity(0.1),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Text(
+                                '$presentPercent%',
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: colorScheme.primary,
+                                ),
+                              ),
                             ),
                           ),
-                        ),
+                          const SizedBox(width: 20),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Tỉ lệ điểm danh',
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  fontWeight: FontWeight.w600,
+                                  color: colorScheme.onSurface,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              // Text(
+                              //   'Học kỳ Xuân 2025',
+                              //   style: theme.textTheme.bodyMedium?.copyWith(
+                              //     color: colorScheme.onSurfaceVariant,
+                              //   ),
+                              // ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 20),
+
+                      const SizedBox(height: 20),
+
+                      // Thanh tiến độ
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            'Tỉ lệ điểm danh',
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              fontWeight: FontWeight.w600,
-                              color: colorScheme.onSurface,
-                            ),
-                          ),
                           const SizedBox(height: 4),
-                          Text(
-                            'Học kỳ Xuân 2025',
-                            style: theme.textTheme.bodyMedium?.copyWith(
-                              color: colorScheme.onSurfaceVariant,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: LinearProgressIndicator(
+                              value: progressValue,
+                              backgroundColor:
+                                  colorScheme.primary.withOpacity(0.1),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                  colorScheme.primary),
+                              minHeight: 8,
                             ),
                           ),
                         ],
                       ),
                     ],
                   ),
-
-                  const SizedBox(height: 20),
-
-                  // Thanh tiến độ
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 4),
-                      ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: LinearProgressIndicator(
-                          value: 0.85,
-                          backgroundColor: colorScheme.primary.withOpacity(0.1),
-                          valueColor: AlwaysStoppedAnimation<Color>(
-                              colorScheme.primary),
-                          minHeight: 8,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                );
+              },
             ),
 
             const SizedBox(height: 16),
 
-            // Thống kê chi tiết
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                _buildStatItem(
-                  context,
-                  '17',
-                  'Buổi đi học',
-                  Icons.check_circle,
-                  colorScheme.primary,
-                ),
-                _buildStatDivider(context),
-                _buildStatItem(
-                  context,
-                  '3',
-                  'Buổi vắng',
-                  Icons.cancel,
-                  colorScheme.error,
-                ),
-                _buildStatDivider(context),
-                _buildStatItem(
-                  context,
-                  '20',
-                  'Tổng buổi học',
-                  Icons.calendar_today,
-                  colorScheme.secondary,
-                ),
-              ],
+            // Thống kê chi tiết từ API
+            Consumer<AttendanceProvider>(
+              builder: (context, provider, child) {
+                if (provider.isLoading) {
+                  return const Center(
+                    child: Padding(
+                      padding: EdgeInsets.all(16.0),
+                      child: CircularProgressIndicator(),
+                    ),
+                  );
+                }
+
+                if (provider.error != null ||
+                    provider.attendanceHistory.isEmpty) {
+                  return const SizedBox.shrink();
+                }
+
+                final attendanceHistory = provider.attendanceHistory;
+                final totalAttendance = attendanceHistory.length;
+                final presentCount =
+                    attendanceHistory.where((a) => a.isPresent).length;
+                final absentCount = totalAttendance - presentCount;
+
+                return Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _buildStatItem(
+                      context,
+                      '$presentCount',
+                      'Buổi đi học',
+                      Icons.check_circle,
+                      colorScheme.primary,
+                    ),
+                    _buildStatDivider(context),
+                    _buildStatItem(
+                      context,
+                      '$absentCount',
+                      'Buổi vắng',
+                      Icons.cancel,
+                      colorScheme.error,
+                    ),
+                    _buildStatDivider(context),
+                    _buildStatItem(
+                      context,
+                      '$totalAttendance',
+                      'Tổng buổi học',
+                      Icons.calendar_today,
+                      colorScheme.secondary,
+                    ),
+                  ],
+                );
+              },
             ),
           ],
         ),

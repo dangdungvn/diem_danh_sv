@@ -71,22 +71,22 @@ class StatisticsAppBar extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 8),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.15),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    'Học kỳ Xuân 2025',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white.withOpacity(0.9),
-                    ),
-                  ),
-                ),
+                // Container(
+                //   padding:
+                //       const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                //   decoration: BoxDecoration(
+                //     color: Colors.white.withOpacity(0.15),
+                //     borderRadius: BorderRadius.circular(20),
+                //   ),
+                //   child: Text(
+                //     'Học kỳ Xuân 2025',
+                //     style: TextStyle(
+                //       fontSize: 14,
+                //       fontWeight: FontWeight.w500,
+                //       color: Colors.white.withOpacity(0.9),
+                //     ),
+                //   ),
+                // ),
               ],
             ),
           ),
