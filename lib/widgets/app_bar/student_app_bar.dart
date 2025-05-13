@@ -36,13 +36,9 @@ class StudentAppBar extends StatelessWidget {
           children: [
             Container(
               padding: const EdgeInsets.all(6),
-              decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.2),
-                borderRadius: BorderRadius.circular(8),
-              ),
               child: Image.asset(
-                'assets/images/logo.jpg',
-                width: 24,
+                'assets/images/logo-short.png',
+                width: 50,
                 height: 24,
                 fit: BoxFit.cover,
               ),

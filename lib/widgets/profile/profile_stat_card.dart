@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/attendance_provider.dart';
 
 class ProfileStatCard extends StatelessWidget {
   const ProfileStatCard({super.key});
@@ -26,45 +28,75 @@ class ProfileStatCard extends StatelessWidget {
             ),
           ],
         ),
-        child: IntrinsicHeight(
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              _buildStatItem(
-                context: context,
-                label: 'Buổi học',
-                value: '24',
-                icon: Icons.calendar_today,
-                iconColor: colorScheme.primary,
+        child: Consumer<AttendanceProvider>(
+          builder: (context, provider, child) {
+            if (provider.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            if (provider.error != null) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline,
+                        color: colorScheme.error, size: 32),
+                    const SizedBox(height: 8),
+                    Text('Không thể tải dữ liệu điểm danh',
+                        style: Theme.of(context).textTheme.bodyMedium),
+                    const SizedBox(height: 8),
+                    ElevatedButton(
+                      onPressed: () => provider.fetchAttendanceHistory(),
+                      child: const Text('Thử lại'),
+                    ),
+                  ],
+                ),
+              );
+            }
+            final totalAttendance = provider.attendanceHistory.length;
+            final presentCount =
+                provider.attendanceHistory.where((a) => a.isPresent).length;
+            final absentCount = totalAttendance - presentCount;
+            return IntrinsicHeight(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildStatItem(
+                    context: context,
+                    label: 'Buổi học',
+                    value: '$totalAttendance',
+                    icon: Icons.calendar_today,
+                    iconColor: colorScheme.primary,
+                  ),
+                  VerticalDivider(
+                    thickness: 1,
+                    color: isDark
+                        ? colorScheme.outlineVariant
+                        : Colors.grey.withOpacity(0.2),
+                  ),
+                  _buildStatItem(
+                    context: context,
+                    label: 'Điểm danh',
+                    value: '$presentCount',
+                    icon: Icons.check_circle_outline,
+                    iconColor: Colors.green,
+                  ),
+                  VerticalDivider(
+                    thickness: 1,
+                    color: isDark
+                        ? colorScheme.outlineVariant
+                        : Colors.grey.withOpacity(0.2),
+                  ),
+                  _buildStatItem(
+                    context: context,
+                    label: 'Vắng mặt',
+                    value: '$absentCount',
+                    icon: Icons.cancel_outlined,
+                    iconColor: Colors.red,
+                  ),
+                ],
               ),
-              VerticalDivider(
-                thickness: 1,
-                color: isDark
-                    ? colorScheme.outlineVariant
-                    : Colors.grey.withOpacity(0.2),
-              ),
-              _buildStatItem(
-                context: context,
-                label: 'Điểm danh',
-                value: '20',
-                icon: Icons.check_circle_outline,
-                iconColor: Colors.green,
-              ),
-              VerticalDivider(
-                thickness: 1,
-                color: isDark
-                    ? colorScheme.outlineVariant
-                    : Colors.grey.withOpacity(0.2),
-              ),
-              _buildStatItem(
-                context: context,
-                label: 'Vắng mặt',
-                value: '4',
-                icon: Icons.cancel_outlined,
-                iconColor: Colors.red,
-              ),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

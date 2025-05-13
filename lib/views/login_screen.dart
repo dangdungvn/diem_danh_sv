@@ -51,31 +51,25 @@ class _LoginScreenState extends State<LoginScreen> {
 
               // Logo hoặc hình ảnh
               Container(
-                height: 120,
-                width: 120,
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(4),
                 decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
                   shape: BoxShape.circle,
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      blurRadius: 15,
-                      spreadRadius: 5,
-                    ),
-                  ],
                 ),
-                child: Icon(
-                  Icons.school,
-                  size: 80,
-                  color: colorScheme.primary,
+                child: ClipOval(
+                  child: Image.asset(
+                    'assets/images/logo.jpg',
+                    width: 120,
+                    height: 120,
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
 
               // Tiêu đề
               const SizedBox(height: 24),
               const Text(
-                'UTT School',
+                'UTT University',
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 32,
