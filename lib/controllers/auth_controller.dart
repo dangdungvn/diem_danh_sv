@@ -103,18 +103,32 @@ class AuthController {
       // Nếu không có refresh token thì không thể làm mới
       if (refreshToken == null || refreshToken.isEmpty) {
         print('Không có refresh token để làm mới phiên đăng nhập');
+        await clearAccessToken(); // Đảm bảo xóa access token nếu không có refresh token
         return false;
       }
 
       // Gọi API để làm mới token
       final AuthModel newAuth = await _authService.refreshToken(refreshToken);
 
+      // Kiểm tra accessToken mới có tồn tại không
+      if (newAuth.accessToken.isEmpty) {
+        print('Access token mới không hợp lệ');
+        await clearAccessToken();
+        return false;
+      }
+
       // Lưu access token mới vào secure storage
       await _storage.write(key: 'access_token', value: newAuth.accessToken);
 
-      // Cập nhật thông tin người dùng nếu cần
-      final User user = await _authService.getUserInfo(newAuth.accessToken);
-      await _storage.write(key: 'user_info', value: jsonEncode(user.toJson()));
+      try {
+        // Cập nhật thông tin người dùng nếu cần
+        final User user = await _authService.getUserInfo(newAuth.accessToken);
+        await _storage.write(
+            key: 'user_info', value: jsonEncode(user.toJson()));
+      } catch (userError) {
+        print('Không thể lấy thông tin người dùng: $userError');
+        // Tiếp tục vì đã có access token mới
+      }
 
       print('Access token đã được làm mới thành công');
       return true;

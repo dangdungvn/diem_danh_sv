@@ -38,7 +38,7 @@ class FeatureGrid extends StatelessWidget {
         FeatureCard(
           icon: Icons.bar_chart,
           title: 'Thống kê',
-          description: 'Thống kê chi tiết',
+          description: 'Thống kê điểm danh',
           onTap: () {
             Navigator.push(
               context,

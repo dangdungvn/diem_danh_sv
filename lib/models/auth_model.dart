@@ -6,11 +6,10 @@ class AuthModel {
     required this.accessToken,
     required this.refreshToken,
   });
-
   factory AuthModel.fromJson(Map<String, dynamic> json) {
     return AuthModel(
-      accessToken: json['access'],
-      refreshToken: json['refresh'],
+      accessToken: json['access'] ?? '',
+      refreshToken: json['refresh'] ?? '',
     );
   }
 

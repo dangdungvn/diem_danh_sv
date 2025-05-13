@@ -75,6 +75,11 @@ class AuthService {
       } else {
         throw Exception('Không thể làm mới token');
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        throw Exception('Refresh token hết hạn hoặc không hợp lệ');
+      }
+      throw Exception('Lỗi kết nối: ${e.message}');
     } catch (e) {
       throw Exception('Đã xảy ra lỗi: $e');
     }
