@@ -7,6 +7,7 @@ class ClassScheduleCard extends StatelessWidget {
   final String teacher;
   final String type;
   final Color color;
+  final String className;
 
   const ClassScheduleCard({
     super.key,
@@ -16,6 +17,7 @@ class ClassScheduleCard extends StatelessWidget {
     required this.teacher,
     required this.type,
     required this.color,
+    required this.className,
   });
 
   @override
@@ -212,6 +214,42 @@ class ClassScheduleCard extends StatelessWidget {
                         ),
                         Text(
                           teacher,
+                          style: theme.textTheme.titleMedium?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: colorScheme.onSurface,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                Row(
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: colorScheme.error.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Icon(
+                        Icons.class_,
+                        size: 18,
+                        color: colorScheme.error,
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Lớp học',
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ),
+                        Text(
+                          className,
                           style: theme.textTheme.titleMedium?.copyWith(
                             fontWeight: FontWeight.bold,
                             color: colorScheme.onSurface,

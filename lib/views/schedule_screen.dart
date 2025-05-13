@@ -6,6 +6,7 @@ import '../widgets/schedule/day_selector.dart';
 import '../widgets/schedule/class_schedule_card.dart';
 import '../widgets/schedule/empty_schedule_view.dart';
 import '../providers/schedule_provider.dart';
+import 'month_schedule_screen.dart';
 
 class ScheduleScreen extends StatefulWidget {
   const ScheduleScreen({super.key});
@@ -149,6 +150,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                                   teacher: schedule.teacherName,
                                   type: schedule.getLessonType(),
                                   color: schedule.getSubjectColor(),
+                                  className: schedule.className,
                                 ),
                               );
                             },
@@ -159,7 +161,14 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                   ],
                 ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {},
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const MonthScheduleScreen(),
+            ),
+          );
+        },
         icon: const Icon(Icons.calendar_month),
         label: const Text('Xem lịch tháng'),
         elevation: 6,
