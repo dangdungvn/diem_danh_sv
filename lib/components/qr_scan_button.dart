@@ -118,12 +118,7 @@ class QRScanButton extends StatelessWidget {
   }
 
   void _showQRScanner(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (context) => const QRScannerView(),
-    );
+    Navigator.of(context).pushNamed('/qr-scanner');
   }
 }
 

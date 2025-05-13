@@ -10,7 +10,7 @@ class ProfileService {
 
   ProfileService() {
     _baseUrl = dotenv.env['API_URL'] ??
-        'http://34.142.233.245'; // Lấy URL từ .env hoặc dùng giá trị mặc định
+        'http://34.143.254.122'; // Lấy URL từ .env hoặc dùng giá trị mặc định
   }
 
   // Lấy thông tin người dùng hiện tại

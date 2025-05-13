@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
       child: Consumer2<ThemeProvider, AuthProvider>(
         builder: (context, themeProvider, authProvider, child) {
           return MaterialApp(
-            title: 'Điểm Danh SV',
+            title: 'UTT University Attendance',
             debugShowCheckedModeBanner: false,
             theme: getLightTheme(),
             darkTheme: getDarkTheme(),

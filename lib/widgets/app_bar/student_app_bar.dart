@@ -48,7 +48,7 @@ class StudentAppBar extends StatelessWidget {
             ),
             const SizedBox(width: 8),
             const Text(
-              'Điểm Danh SV',
+              'UTT University',
               style: TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
