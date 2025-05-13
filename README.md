@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/images/logo.jpg" alt="DIEM DANH SV Logo" width="200" height="200" style="border-radius: 50%;">
+</p>
+
 # DIEM DANH SV - Ứng dụng Điểm Danh Sinh Viên
 
 Ứng dụng điểm danh sinh viên được phát triển bằng Flutter, giúp sinh viên điểm danh nhanh chóng thông qua quét mã QR và xem thông tin học tập.
