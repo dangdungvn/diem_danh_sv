@@ -3,15 +3,17 @@ import 'package:diem_danh_sv/models/qr_attendance_model.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
+import 'dart:convert';
 
 class AttendanceService {
   final Dio _dio = Dio();
   late final String _baseUrl;
-
   AttendanceService() {
     _baseUrl = dotenv.env['API_URL'] ??
         'http://34.143.254.122'; // Lấy URL từ .env hoặc dùng giá trị mặc định
-  } // Lấy lịch sử điểm danh
+  }
+
+  // Lấy lịch sử điểm danh
   Future<List<AttendanceHistoryModel>> getAttendanceHistory(
       String token) async {
     try {
@@ -50,21 +52,28 @@ class AttendanceService {
       print('Chi tiết lỗi lấy lịch sử điểm danh: $e');
       throw Exception('Đã xảy ra lỗi khi lấy lịch sử điểm danh: $e');
     }
-  } // Điểm danh bằng mã QR
+  }
 
+  // Điểm danh bằng mã QR
   Future<QrAttendanceResponseModel> attendanceByQR(String token,
       QrAttendanceModel qrData, Map<String, dynamic> locationData) async {
     try {
       // Đảm bảo gửi đúng định dạng mà API yêu cầu
       final Map<String, dynamic> requestData = {
-        'qr_data': qrData.rawData, // Đảm bảo đây là chuỗi gốc chưa được xử lý
+        'qr_data':
+            qrData.rawData, // Sử dụng chuỗi gốc (với nháy đơn) như API yêu cầu
         'schedule': qrData.scheduleId,
         'latitude': locationData['latitude'],
         'longitude': locationData['longitude'],
         'device_info': locationData['device_info'] ?? Platform.operatingSystem,
       };
-
       print('Gửi yêu cầu điểm danh: $requestData');
+      print('JSON của qr_data: ${qrData.rawData}');
+      print('Kiểu dữ liệu của qr_data: ${qrData.rawData.runtimeType}');
+
+      // Hiển thị chuỗi JSON cuối cùng để debug
+      final formattedJson = json.encode(requestData);
+      print('Chuỗi JSON gửi đi: $formattedJson');
 
       try {
         final response = await _dio.post(
@@ -76,11 +85,23 @@ class AttendanceService {
                 true, // Chấp nhận tất cả status code để xử lý lỗi
           ),
         );
-
         print('Phản hồi từ server [${response.statusCode}]: ${response.data}');
 
         if (response.statusCode == 200) {
-          return QrAttendanceResponseModel.fromJson(response.data);
+          final responseData = response.data;
+          // Kiểm tra xem response có phải là thành công không
+          final bool isSuccess = responseData['success'] == true ||
+              responseData['status'] == 'success';
+
+          if (isSuccess) {
+            return QrAttendanceResponseModel.fromJson(responseData);
+          } else {
+            return QrAttendanceResponseModel(
+              success: false,
+              message: responseData['message'] ?? 'Điểm danh thất bại',
+              data: responseData['data'] ?? responseData['attendance'],
+            );
+          }
         } else {
           String errorMessage =
               'Điểm danh thất bại. Mã lỗi: ${response.statusCode}';

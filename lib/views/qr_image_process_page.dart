@@ -165,9 +165,7 @@ class _QrImageProcessPageState extends State<QrImageProcessPage> {
     if (permission == LocationPermission.deniedForever) {
       return Future.error(
           'Quyền truy cập vị trí bị từ chối vĩnh viễn, không thể yêu cầu quyền');
-    }
-
-    // Lấy vị trí hiện tại
+    } // Lấy vị trí hiện tại
     final position = await Geolocator.getCurrentPosition();
 
     return {

@@ -27,13 +27,15 @@ class QrAttendanceModel {
   });
   factory QrAttendanceModel.fromRawData(String rawData) {
     String cleanedData = rawData.trim();
-    // Kiểm tra xử lý dữ liệu QR với nháy đơn hoặc nháy kép
-    cleanedData = cleanedData.replaceAll("'", "\"");
+    // Để parse trong code, thay nháy đơn bằng nháy kép
+    String parseableData = cleanedData.replaceAll("'", "\"");
 
     print('Cleaned QR data: $cleanedData');
+    print('Parseable QR data: $parseableData');
 
     try {
-      final Map<String, dynamic> data = json.decode(cleanedData);
+      // Parse bằng phiên bản với nháy kép
+      final Map<String, dynamic> data = json.decode(parseableData);
       return QrAttendanceModel(
         scheduleId: data['schedule_id'] ?? 0,
         courseName: data['course_name'] ?? '',
@@ -44,7 +46,8 @@ class QrAttendanceModel {
         lessonCount: data['lesson_count'] ?? 0,
         startTime: data['start_time'] ?? '',
         endTime: data['end_time'] ?? '',
-        rawData: rawData,
+        rawData:
+            cleanedData, // Giữ nguyên chuỗi gốc với nháy đơn để gửi lên server
       );
     } catch (e) {
       print('Lỗi khi parse dữ liệu QR: $e');
@@ -92,12 +95,17 @@ class QrAttendanceResponseModel {
     required this.message,
     this.data,
   });
-
   factory QrAttendanceResponseModel.fromJson(Map<String, dynamic> json) {
+    // Xử lý cả 2 format response:
+    // Format 1: {"success": true, "message": "...", "data": {...}}
+    // Format 2: {"status": "success", "message": "...", "attendance": {...}}
+    final bool isSuccess =
+        json['success'] == true || json['status'] == 'success';
+
     return QrAttendanceResponseModel(
-      success: json['success'] ?? false,
+      success: isSuccess,
       message: json['message'] ?? 'Không có thông tin',
-      data: json['data'],
+      data: json['data'] ?? json['attendance'],
     );
   }
 }
