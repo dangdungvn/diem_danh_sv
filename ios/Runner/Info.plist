@@ -51,5 +51,7 @@
 		<string>Ứng dụng cần quyền truy cập vị trí của bạn để xác thực điểm danh</string>
 		<key>NSLocationAlwaysUsageDescription</key>
 		<string>Ứng dụng cần quyền truy cập vị trí của bạn để xác thực điểm danh</string>
+		<key>NSFaceIDUsageDescription</key>
+		<string>Ứng dụng cần sử dụng Face ID để xác thực đăng nhập</string>
 	</dict>
 </plist>
