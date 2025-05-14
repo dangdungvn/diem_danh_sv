@@ -15,7 +15,7 @@ class WeeklyStatisticsCard extends StatefulWidget {
 
 class _WeeklyStatisticsCardState extends State<WeeklyStatisticsCard> {
   int selectedIndex = 0;
-  List<String> periods = ['Tuần này', '7 ngày qua'];
+  List<String> periods = ['Tuần này', '30 ngày qua'];
 
   @override
   Widget build(BuildContext context) {
@@ -147,13 +147,7 @@ class _WeeklyStatisticsCardState extends State<WeeklyStatisticsCard> {
                             .where((a) => a.timestamp.isAfter(startDate))
                             .toList();
                         break;
-                      case 1: // 7 ngày qua
-                        final last7Days = now.subtract(const Duration(days: 7));
-                        filteredData = attendanceData
-                            .where((a) => a.timestamp.isAfter(last7Days))
-                            .toList();
-                        break;
-                      case 2: // 30 ngày qua
+                      case 1: // 30 ngày qua
                         final last30Days =
                             now.subtract(const Duration(days: 30));
                         filteredData = attendanceData

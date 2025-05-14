@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../../models/attendance_history_model.dart';
 import '../../providers/attendance_provider.dart';
@@ -263,8 +262,7 @@ class _AttendanceDetailCardState extends State<AttendanceDetailCard> {
                     ),
                     const SizedBox(width: 4),
                     Text(
-                      DateFormat('HH:mm • dd/MM/yyyy')
-                          .format(attendance.timestamp),
+                      attendance.timestampVn,
                       style: theme.textTheme.bodySmall?.copyWith(
                         color: colorScheme.onSurfaceVariant,
                       ),

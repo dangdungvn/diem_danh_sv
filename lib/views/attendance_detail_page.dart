@@ -383,11 +383,8 @@ class _AttendanceDetailPageState extends State<AttendanceDetailPage> {
                     attendance.scheduleDetail.teacherName),
                 _buildDetailRow(Icons.schedule, 'Thời gian học',
                     '${DateFormat('HH:mm dd/MM/yyyy').format(attendance.scheduleDetail.startTime)} - ${DateFormat('HH:mm').format(attendance.scheduleDetail.endTime)}'),
-                _buildDetailRow(
-                    Icons.access_time,
-                    'Thời gian điểm danh',
-                    DateFormat('HH:mm dd/MM/yyyy')
-                        .format(attendance.timestamp)),
+                _buildDetailRow(Icons.access_time, 'Thời gian điểm danh',
+                    attendance.timestampVn),
                 if (attendance.isLate &&
                     attendance.minutesLate != null &&
                     attendance.minutesLate! > 0)
@@ -546,7 +543,7 @@ class _AttendanceDetailItem extends StatelessWidget {
                 Icon(Icons.access_time, size: 18, color: colorScheme.primary),
                 const SizedBox(width: 6),
                 Text(
-                  'Điểm danh: ${DateFormat('HH:mm dd/MM/yyyy').format(attendance.timestamp)}',
+                  'Điểm danh: ${attendance.timestampVn}',
                   style: theme.textTheme.bodyMedium,
                 ),
               ],
