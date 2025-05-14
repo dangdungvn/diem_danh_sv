@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../models/attendance_history_model.dart';
 import '../providers/attendance_provider.dart';
@@ -381,8 +380,8 @@ class _AttendanceDetailPageState extends State<AttendanceDetailPage> {
                     attendance.scheduleDetail.room),
                 _buildDetailRow(Icons.person, 'Giáo viên',
                     attendance.scheduleDetail.teacherName),
-                _buildDetailRow(Icons.schedule, 'Thời gian học',
-                    '${DateFormat('HH:mm dd/MM/yyyy').format(attendance.scheduleDetail.startTime)} - ${DateFormat('HH:mm').format(attendance.scheduleDetail.endTime)}'),
+                // _buildDetailRow(Icons.schedule, 'Thời gian học',
+                //     '${DateFormat('HH:mm dd/MM/yyyy').format(attendance.scheduleDetail.startTime)} - ${DateFormat('HH:mm').format(attendance.scheduleDetail.endTime)}'),
                 _buildDetailRow(Icons.access_time, 'Thời gian điểm danh',
                     attendance.timestampVn),
                 if (attendance.isLate &&
@@ -527,16 +526,16 @@ class _AttendanceDetailItem extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                Icon(Icons.schedule, size: 18, color: colorScheme.primary),
-                const SizedBox(width: 6),
-                Text(
-                  'Buổi học: ${DateFormat('HH:mm dd/MM/yyyy').format(attendance.scheduleDetail.startTime)} - ${DateFormat('HH:mm').format(attendance.scheduleDetail.endTime)}',
-                  style: theme.textTheme.bodyMedium,
-                ),
-              ],
-            ),
+            // Row(
+            //   children: [
+            //     Icon(Icons.schedule, size: 18, color: colorScheme.primary),
+            //     const SizedBox(width: 6),
+            //     Text(
+            //       'Buổi học: ${DateFormat('HH:mm dd/MM/yyyy').format(attendance.scheduleDetail.startTime)} - ${DateFormat('HH:mm').format(attendance.scheduleDetail.endTime)}',
+            //       style: theme.textTheme.bodyMedium,
+            //     ),
+            //   ],
+            // ),
             const SizedBox(height: 8),
             Row(
               children: [

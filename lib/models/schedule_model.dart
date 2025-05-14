@@ -45,15 +45,11 @@ class ScheduleModel {
       className: json['class_name'] ?? 'Unknown Class',
       lessonStart: json['lesson_start'] ?? 0,
       lessonCount: json['lesson_count'] ?? 0,
-      startTime: DateTime.parse(
-          json['start_time'] ?? DateTime.now().toIso8601String()),
-      endTime:
-          DateTime.parse(json['end_time'] ?? DateTime.now().toIso8601String()),
+      startTime: DateTime.parse(json['start_time'] ?? '').toLocal(),
+      endTime: DateTime.parse(json['end_time'] ?? '').toLocal(),
       weekdays: List<int>.from(json['weekdays'] ?? []),
-      startDate: DateTime.parse(
-          json['start_date'] ?? DateTime.now().toIso8601String()),
-      endDate:
-          DateTime.parse(json['end_date'] ?? DateTime.now().toIso8601String()),
+      startDate: DateTime.tryParse(json['start_date'] ?? '') ?? DateTime.now(),
+      endDate: DateTime.tryParse(json['end_date'] ?? '') ?? DateTime.now(),
       isActive: json['is_active'] ?? false,
       teacherName: json['teacher_name'] ?? 'Unknown Teacher',
       roomName: json['room_name'] ?? 'Unknown Room',
