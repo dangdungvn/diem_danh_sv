@@ -236,26 +236,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   // Hiển thị dialog xác nhận đăng xuất
   void _showLogoutConfirmation(BuildContext context) {
+    // Store the navigator key for use after async operation
+    final navigator = Navigator.of(context);
+
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Đăng xuất'),
         content: const Text('Bạn có chắc chắn muốn đăng xuất không?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: const Text('Hủy'),
           ),
           TextButton(
             onPressed: () {
-              Navigator.pop(context);
+              // Close the dialog first
+              Navigator.pop(dialogContext);
+
               // Thực hiện đăng xuất
               Provider.of<AuthProvider>(context, listen: false)
                   .logout()
                   .then((_) {
-                // Chuyển về màn hình đăng nhập sau khi đăng xuất
-                Navigator.pushNamedAndRemoveUntil(
-                    context, AppRoutes.login, (route) => false);
+                // Use navigatorState instead of context which might be deactivated
+                navigator.pushNamedAndRemoveUntil(
+                    AppRoutes.login, (route) => false);
               });
             },
             child: const Text('Đăng xuất'),
