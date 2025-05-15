@@ -61,7 +61,7 @@ class ClassesAppBar extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     const Text(
-                      'Danh sách lớp học',
+                      'Lớp học của tôi',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 22,
@@ -79,7 +79,7 @@ class ClassesAppBar extends StatelessWidget {
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
-                    'Chọn lớp học để xem chi tiết',
+                    'Học kỳ Xuân 2025',
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
@@ -102,10 +102,28 @@ class ClassesAppBar extends StatelessWidget {
               shape: BoxShape.circle,
             ),
             child: IconButton(
+              icon: const Icon(Icons.search, color: Colors.white),
+              onPressed: () {
+                // TODO: Implement search
+              },
+              tooltip: 'Tìm kiếm lớp học',
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(right: 8.0),
+          child: Container(
+            margin: const EdgeInsets.all(8),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+            ),
+            child: IconButton(
               icon: const Icon(Icons.filter_list, color: Colors.white),
               onPressed: () {
                 // TODO: Implement filter
               },
+              tooltip: 'Lọc danh sách lớp',
             ),
           ),
         ),
