@@ -46,7 +46,7 @@ class AttendanceHistoryModel {
         id: json["id"],
         schedule: json["schedule"],
         scheduleDetail: ScheduleDetail.fromJson(json["schedule_detail"]),
-        timestamp: DateTime.parse(json["timestamp"]),
+        timestamp: DateTime.parse(json['timestamp'] ?? '').toLocal(),
         timestampVn: json["timestamp_vn"],
         isPresent: json["is_present"],
         isLate: json["is_late"],
@@ -100,8 +100,8 @@ class ScheduleDetail {
         teacherName: json["teacher_name"],
         room: json["room"],
         className: json["class_name"],
-        startTime: DateTime.parse(json["start_time"]),
-        endTime: DateTime.parse(json["end_time"]),
+        startTime: DateTime.parse(json['start_time'] ?? '').toLocal(),
+        endTime: DateTime.parse(json['end_time'] ?? '').toLocal(),
       );
 
   Map<String, dynamic> toJson() => {
