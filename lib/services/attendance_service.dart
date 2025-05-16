@@ -72,7 +72,7 @@ class AttendanceService {
           if (userEmail.toLowerCase() == 'anh111xt@gmail.com') {
             return QrAttendanceResponseModel(
               success: false,
-              message: 'Tài khoản của bạn ngoài vùng điểm danh',
+              message: 'Tài khoản của bạn ngoài vùng được điểm danh',
             );
           }
         } catch (e) {
