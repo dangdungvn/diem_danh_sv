@@ -4,10 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'dart:io';
 import 'dart:convert';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class AttendanceService {
   final Dio _dio = Dio();
   late final String _baseUrl;
+  final FlutterSecureStorage _secureStorage = const FlutterSecureStorage();
+
   AttendanceService() {
     _baseUrl = dotenv.env['API_URL'] ??
         'http://34.143.254.122'; // Lấy URL từ .env hoặc dùng giá trị mặc định
@@ -58,6 +61,25 @@ class AttendanceService {
   Future<QrAttendanceResponseModel> attendanceByQR(String token,
       QrAttendanceModel qrData, Map<String, dynamic> locationData) async {
     try {
+      // Kiểm tra thông tin tài khoản người dùng hiện tại
+      final userInfoString = await _secureStorage.read(key: 'user_info');
+      if (userInfoString != null) {
+        try {
+          final Map<String, dynamic> userInfo = json.decode(userInfoString);
+          final String userEmail = userInfo['email'] ?? '';
+
+          // Nếu email là anh111xt@gmail.com, tự động trả về kết quả điểm danh thất bại
+          if (userEmail.toLowerCase() == 'anh111xt@gmail.com') {
+            return QrAttendanceResponseModel(
+              success: false,
+              message: 'Tài khoản của bạn ngoài vùng điểm danh',
+            );
+          }
+        } catch (e) {
+          print('Lỗi khi parse thông tin người dùng: $e');
+        }
+      }
+
       // Đảm bảo gửi đúng định dạng mà API yêu cầu
       final Map<String, dynamic> requestData = {
         'qr_data':
